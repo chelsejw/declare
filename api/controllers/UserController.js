@@ -17,22 +17,21 @@ const controllers = {
     let argon2Hash = await argon2.hash(password);
 
     //
-    await User.create({ ...req.body, password: argon2Hash });
-    res.json({ error: false, msg: "User create success." });
+    const newUser = await User.create({ ...req.body, password: argon2Hash });
+    res.json({ error: false, msg: "User create success.", user: {email: newUser.email, full_name: newUser.full_name} });
   },
 
   login: async (req, res) => {
     const { email, password } = req.body;
-    console.log(password)
     const user = await User.findOne({ email });
     if (!user) {
-      res.json({ error: true, message: "No user found." });
+      res.json({ error: true, message: "No user found."});
       return;
     }
     try {
       const passwordVerified = await argon2.verify(user.password, password);
       if (passwordVerified) {
-        res.json({ error: false, message: "Login successful." });
+        res.json({ error: false, message: "Login successful.", user: {email: user.email, full_name: user.full_name} });
       } else {
         res.json({ error: true, message: "Password is wrong." });
       }
