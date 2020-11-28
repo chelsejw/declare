@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  Link,
   Paper,
   Grid,
   Typography,
@@ -43,22 +42,15 @@ export default function App() {
       .then((res) => {
         const exists = res.data.exists
         setUserExists(res.data.exists);
-        if  (exists) {
+        if (exists) {
           setStage("login");
           setButtonText("Check Password");
-          setMessage("Enter your password")
+          setMessage("This email is registered. Enter your password")
         } else {
           setStage("register");
           setButtonText("Register");
           setMessage("Email does not exist in our database. Register for the service")
-
-
         }
-        setMessage(
-          userExists
-            ? "Enter your password"
-            : "Email does not exist in our database. Register for the service"
-        );
       })
       .catch((err) => {
         console.log(err, "There was an error");
