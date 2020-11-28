@@ -41,7 +41,7 @@ export default function Update({ inputs, handleInputChange }) {
           <Switch
             onChange={(e) => handleInputChange(e)}
             name="active"
-            value={inputs.active}
+            checked={inputs.active ? true : false}
             inputProps={{ "aria-label": "secondary checkbox" }}
           />
         </Grid>

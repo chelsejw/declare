@@ -39,7 +39,7 @@ export default function App() {
 
   const handleInputChange = (e) => {
     if (e.target.name === "active") {
-      setInputs({ ...inputs, [e.target.name]: e.target.checked });
+      setInputs({ ...inputs, active: !inputs.active });
       return;
     }
     setInputs({ ...inputs, [e.target.name]: e.target.value });
