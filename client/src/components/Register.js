@@ -13,7 +13,7 @@ export default function Register({inputs, handleInputChange}) {
               id="ga_email"
               label="GA Email Address"
               name="ga_email"
-              autoComplete="email"
+              // autoComplete="email"
               autoFocus
               value={inputs.ga_email}
               onChange={(e)=> handleInputChange(e)}

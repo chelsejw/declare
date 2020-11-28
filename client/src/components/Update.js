@@ -10,6 +10,19 @@ export default function Update({ inputs, handleInputChange }) {
         margin="normal"
         required
         fullWidth
+        id="full_name"
+        label="Full Name"
+        name="full_name"
+        autoComplete="full_name"
+        autoFocus
+        value={inputs.full_name}
+        onChange={(e) => handleInputChange(e)}
+      />
+      <TextField
+        variant="outlined"
+        margin="normal"
+        required
+        fullWidth
         id="ga_email"
         label="GA Email Address"
         name="ga_email"

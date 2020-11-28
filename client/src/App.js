@@ -3,8 +3,6 @@ import {
   Paper,
   Grid,
   Typography,
-  Checkbox,
-  FormControlLabel,
   TextField,
   CssBaseline,
   Avatar,
@@ -17,15 +15,22 @@ import Copyright from "./components/Copyright";
 import axios from "axios";
 import Register from "./components/Register";
 import Update from "./components/Update";
+import Login from "./components/Login";
 
 const useStyles = FormStyle;
 
 export default function App() {
   const classes = useStyles();
 
-  const [inputs, setInputs] = useState({ email: "", password: "" });
+  const [inputs, setInputs] = useState({
+    email: "",
+    password: "",
+    ga_email: "",
+    full_name: "",
+    active: false,
+  });
 
-  const [stage, setStage] = useState("check-email");
+  const [stage, setStage] = useState("check email");
   const [message, setMessage] = useState(
     "Enter your email to see if it's in the database."
   );
@@ -45,8 +50,7 @@ export default function App() {
     console.log(`The stage is now ${stage}`);
   }, [stage]);
 
-  const checkUserRegistration = (e) => {
-    e.preventDefault();
+  const checkUserRegistration = () => {
     axios
       .post("http://localhost:4000/exists", { email: inputs.email })
       .then((res) => {
@@ -68,7 +72,7 @@ export default function App() {
       });
   };
 
-  const loginUser = (e) => {
+  const loginUser = () => {
     console.log(`In login`);
     axios
       .post("http://localhost:4000/login", {
@@ -81,9 +85,8 @@ export default function App() {
           setMessage(responseMessage);
         } else {
           setStage("authenticated");
-          const { email, full_name } = userData;
-          setUser({ ...user, email, full_name });
-          setMessage(`You are logged in as ${email}, and may update your details.`);
+          setInputs(userData);
+          setMessage(`You are authenticated, and may update your details.`);
 
           setButtonText("Update");
         }
@@ -93,17 +96,44 @@ export default function App() {
       });
   };
 
-  const registerUser = (e) => {
+  const updateUser = () => {
+    const { email, full_name, ga_email, active } = inputs;
+    axios
+      .patch("http://localhost:4000/update", {
+        email,
+        full_name,
+        ga_email,
+        active,
+      })
+      .then((res) => {
+        const { error, message: responseMessage, user: userData } = res.data;
+        console.log(res.data)
+        setMessage(responseMessage);
+        if (!error) {
+          setStage("updated profile");
+          setInputs({...inputs, ...userData});
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        setMessage(err);
+      });
+  };
+
+  const registerUser = () => {
     axios
       .post("http://localhost:4000/register", inputs)
       .then((res) => {
         const err = res.data.error;
+        console.log(res.data);
         if (!err) {
           setStage("authenticated");
-          const { email, full_name } = res.data;
+          const { email, full_name } = res.data.user;
           setUser({ ...user, email, full_name });
-          setMessage(`You are now registered as. ${user.email}`);
+          setMessage(`You are now registered as ${email}, and may update your details.`);
           setButtonText("Update");
+        } else {
+          setMessage(res.data.message);
         }
       })
       .catch((err) => {
@@ -112,7 +142,7 @@ export default function App() {
   };
 
   useEffect(() => {
-    console.log(inputs);
+    console.log(`Use effect inputs log`, inputs);
   }, [inputs]);
 
   return (
@@ -131,7 +161,7 @@ export default function App() {
           {message}
 
           <form className={classes.form} noValidate>
-            {stage !== "authenticated" && (
+            {
               <TextField
                 variant="outlined"
                 margin="normal"
@@ -140,25 +170,18 @@ export default function App() {
                 id="email"
                 label="Email Address"
                 name="email"
+                disabled = {stage!=="check email" ? true : false}
                 autoComplete="email"
                 autoFocus
                 value={inputs.email}
                 onChange={(e) => handleInputChange(e)}
               />
-            )}
+            }
 
             {stage === "login" && (
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                onChange={(e) => handleInputChange(e)}
+              <Login
+                inputs={inputs}
+                handleInputChange={(e) => handleInputChange(e)}
               />
             )}
 
@@ -169,17 +192,12 @@ export default function App() {
               />
             )}
 
-            {stage === "authenticated" && (
+            {(stage === "authenticated" || stage==="updated profile") && (
               <Update
                 inputs={inputs}
                 handleInputChange={(e) => handleInputChange(e)}
               />
             )}
-
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
             <Button
               type="submit"
               fullWidth
@@ -190,16 +208,19 @@ export default function App() {
                 e.preventDefault();
 
                 switch (stage) {
-                  case "check-email":
-                    checkUserRegistration(e);
+                  case "check email":
+                    checkUserRegistration();
                     break;
                   case "login":
-                    loginUser(e);
+                    loginUser();
                     break;
                   case "register":
-                    registerUser(e);
+                    registerUser();
                     break;
-
+                  case "authenticated":
+                  case "updated profile":
+                    updateUser();
+                    break;
                   default:
                 }
               }}
