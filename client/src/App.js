@@ -107,11 +107,11 @@ export default function App() {
       })
       .then((res) => {
         const { error, message: responseMessage, user: userData } = res.data;
-        console.log(res.data)
+        console.log(res.data);
         setMessage(responseMessage);
         if (!error) {
           setStage("updated profile");
-          setInputs({...inputs, ...userData});
+          setInputs({ ...inputs, ...userData });
         }
       })
       .catch((err) => {
@@ -130,7 +130,9 @@ export default function App() {
           setStage("authenticated");
           const { email, full_name } = res.data.user;
           setUser({ ...user, email, full_name });
-          setMessage(`You are now registered as ${email}, and may update your details.`);
+          setMessage(
+            `You are now registered as ${email}, and may update your details.`
+          );
           setButtonText("Update");
         } else {
           setMessage(res.data.message);
@@ -170,7 +172,7 @@ export default function App() {
                 id="email"
                 label="Email Address"
                 name="email"
-                disabled = {stage!=="check email" ? true : false}
+                disabled={stage !== "check email" ? true : false}
                 autoComplete="email"
                 autoFocus
                 value={inputs.email}
@@ -192,7 +194,7 @@ export default function App() {
               />
             )}
 
-            {(stage === "authenticated" || stage==="updated profile") && (
+            {(stage === "authenticated" || stage === "updated profile") && (
               <Update
                 inputs={inputs}
                 handleInputChange={(e) => handleInputChange(e)}
@@ -206,7 +208,6 @@ export default function App() {
               className={classes.submit}
               onClick={(e) => {
                 e.preventDefault();
-
                 switch (stage) {
                   case "check email":
                     checkUserRegistration();
