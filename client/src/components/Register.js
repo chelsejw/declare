@@ -12,10 +12,10 @@ export default function Register({inputs, handleInputChange}) {
               fullWidth
               id="ga_email"
               label="GA Email Address"
-              name="email"
+              name="ga_email"
               autoComplete="email"
               autoFocus
-              value={inputs.email}
+              value={inputs.ga_email}
               onChange={(e)=> handleInputChange(e)}
             />
             <TextField
@@ -28,6 +28,7 @@ export default function Register({inputs, handleInputChange}) {
               name="password"
               autoComplete="password"
               autoFocus
+              type="password"
               value={inputs.password}
               onChange={(e)=> handleInputChange(e)}
             />

@@ -29,27 +29,32 @@ export default function App() {
     "Enter your email to see if it's in the database."
   );
   const [buttonText, setButtonText] = useState("Check Email");
-  const [userExists, setUserExists] = useState(null);
+  const [user, setUser] = useState({ email: "" });
 
   const handleInputChange = (e) => {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
   };
+
+  useEffect(() => {
+    console.log(`The stage is now ${stage}`)
+  }, [stage])
 
   const checkUserRegistration = (e) => {
     e.preventDefault();
     axios
       .post("http://localhost:4000/exists", { email: inputs.email })
       .then((res) => {
-        const exists = res.data.exists
-        setUserExists(res.data.exists);
+        const exists = res.data.exists;
         if (exists) {
           setStage("login");
           setButtonText("Check Password");
-          setMessage("This email is registered. Enter your password")
+          setMessage("This email is registered. Enter your password");
         } else {
           setStage("register");
           setButtonText("Register");
-          setMessage("Email does not exist in our database. Register for the service")
+          setMessage(
+            "Email does not exist in our database. Register for the service"
+          );
         }
       })
       .catch((err) => {
@@ -58,17 +63,22 @@ export default function App() {
   };
 
   const loginUser = (e) => {
+    console.log(`In login`)
     axios
-      .post("http://localhost:4000/exists", { email: inputs.email })
+      .post("http://localhost:4000/login", {
+        email: inputs.email,
+        password: inputs.password,
+      })
       .then((res) => {
-        setUserExists(res.data.exists);
-        setStage(userExists ? "login" : "register");
-        setButtonText(userExists ? "Check Password" : "Register");
-        setMessage(
-          userExists
-            ? "Enter your password"
-            : "Email does not exist in our database. Register for the service"
-        );
+        const { error, message: responseMessage } = res.data;
+        console.log(res.data)
+        if (error) {
+          setMessage(responseMessage);
+        } else {
+          setStage("authenticated");
+          setMessage("You are logged in, and may update your details.");
+          setButtonText("Update");
+        }
       })
       .catch((err) => {
         console.log(err, "There was an error");
@@ -81,8 +91,8 @@ export default function App() {
       .then((res) => {
         const err = res.data.error;
         if (!err) {
-          setStage("authorised");
-          setMessage("You are now authorised.");
+          setStage("authenticated");
+          setMessage("You are now registered.");
           setButtonText("Update");
         }
       })
