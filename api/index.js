@@ -17,6 +17,8 @@ const port = 4000;
   app.use(express.json());
   app.post("/exists", UserController.validateRegisteredUser);
   app.post("/register", UserController.register);
+  app.patch("/update", UserController.updateUser);
+
   app.post("/login", UserController.login);
 
   app.get("/", (_, res) => {
@@ -27,6 +29,7 @@ const port = 4000;
     .connect(usingLocalDB ? localMongo : mongoAtlas, { // Will use different connection URI depending on env settings
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      useFindAndModify: true
     })
     .then((_) => {
       // DB connected successfully
