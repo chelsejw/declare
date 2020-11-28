@@ -16,6 +16,7 @@ import FormStyle from "./styles/FormStyle";
 import Copyright from "./components/Copyright";
 import axios from "axios";
 import Register from "./components/Register";
+import Update from "./components/Update";
 
 const useStyles = FormStyle;
 
@@ -32,12 +33,17 @@ export default function App() {
   const [user, setUser] = useState({ email: "" });
 
   const handleInputChange = (e) => {
+    if (e.target.name === "active") {
+      setInputs({ ...inputs, [e.target.name]: e.target.checked });
+      return;
+    }
     setInputs({ ...inputs, [e.target.name]: e.target.value });
+    return;
   };
 
   useEffect(() => {
-    console.log(`The stage is now ${stage}`)
-  }, [stage])
+    console.log(`The stage is now ${stage}`);
+  }, [stage]);
 
   const checkUserRegistration = (e) => {
     e.preventDefault();
@@ -63,20 +69,22 @@ export default function App() {
   };
 
   const loginUser = (e) => {
-    console.log(`In login`)
+    console.log(`In login`);
     axios
       .post("http://localhost:4000/login", {
         email: inputs.email,
         password: inputs.password,
       })
       .then((res) => {
-        const { error, message: responseMessage } = res.data;
-        console.log(res.data)
+        const { error, message: responseMessage, user: userData } = res.data;
         if (error) {
           setMessage(responseMessage);
         } else {
           setStage("authenticated");
-          setMessage("You are logged in, and may update your details.");
+          const { email, full_name } = userData;
+          setUser({ ...user, email, full_name });
+          setMessage(`You are logged in as ${email}, and may update your details.`);
+
           setButtonText("Update");
         }
       })
@@ -92,7 +100,9 @@ export default function App() {
         const err = res.data.error;
         if (!err) {
           setStage("authenticated");
-          setMessage("You are now registered.");
+          const { email, full_name } = res.data;
+          setUser({ ...user, email, full_name });
+          setMessage(`You are now registered as. ${user.email}`);
           setButtonText("Update");
         }
       })
@@ -120,22 +130,22 @@ export default function App() {
 
           {message}
 
-          
           <form className={classes.form} noValidate>
-          {stage!=="authenticated" && <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              value={inputs.email}
-              onChange={(e) => handleInputChange(e)}
-            />}
-            
+            {stage !== "authenticated" && (
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                value={inputs.email}
+                onChange={(e) => handleInputChange(e)}
+              />
+            )}
 
             {stage === "login" && (
               <TextField
@@ -152,8 +162,18 @@ export default function App() {
               />
             )}
 
-            {stage === "register"  && (
-              <Register inputs={inputs} handleInputChange={(e) => handleInputChange(e)} />
+            {stage === "register" && (
+              <Register
+                inputs={inputs}
+                handleInputChange={(e) => handleInputChange(e)}
+              />
+            )}
+
+            {stage === "authenticated" && (
+              <Update
+                inputs={inputs}
+                handleInputChange={(e) => handleInputChange(e)}
+              />
             )}
 
             <FormControlLabel
