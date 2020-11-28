@@ -6,11 +6,10 @@ const queryString = `?entry.1315738832_year=2020&entry.1315738832_month=11&entry
 const controllers = {
   register: async (req, res) => {
     // Check if user exists.
-    console.log(req.body);
     const { email, password } = req.body;
 
     if (await User.findOne({ email })) {
-      res.json({ error: true, msg: "Email is already in use." });
+      res.json({ error: true, message: "Email is already in use." });
       return;
     }
 
@@ -18,26 +17,39 @@ const controllers = {
 
     //
     const newUser = await User.create({ ...req.body, password: argon2Hash });
-    res.json({ error: false, msg: "User create success.", user: {email: newUser.email, full_name: newUser.full_name} });
+    res.json({
+      error: false,
+      msg: "User create success.",
+      user: { email: newUser.email, full_name: newUser.full_name },
+    });
   },
 
   login: async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
-      res.json({ error: true, message: "No user found."});
+      res.json({ error: true, message: "No user found." });
       return;
     }
     try {
       const passwordVerified = await argon2.verify(user.password, password);
       if (passwordVerified) {
-        res.json({ error: false, message: "Login successful.", user: {email: user.email, full_name: user.full_name} });
+        res.json({
+          error: false,
+          message: "Login successful.",
+          user: {
+            email: user.email,
+            full_name: user.full_name,
+            ga_email: user.ga_email,
+            active: user.active,
+          },
+        });
       } else {
         res.json({ error: true, message: "Password is wrong." });
       }
     } catch (err) {
       console.log(err);
-      res.statusCode(500)
+      res.statusCode(500);
       res.json({ error: true, message: "Something went wrong." });
     }
   },
@@ -50,6 +62,34 @@ const controllers = {
     } else {
       res.json({ exists: false });
     }
+  },
+
+  updateUser: async (req, res) => {
+    const { email, ga_email, full_name, active } = req.body;
+    User.findOneAndUpdate(
+      { email },
+      { ga_email, full_name, active },
+      { new: true } // returns the updated document
+    )
+      .then((updatedUser) => {
+        console.log(`Updated data is ${updatedUser}`);
+        res.json({
+          error: false,
+          message: "Update was successeful.",
+          user: {
+            ga_email: updatedUser.ga_email,
+            full_name: updatedUser.full_name,
+            active: updatedUser.active,
+          },
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.json({
+          error: true,
+          message: "Something went wrong while trying to update your user.",
+        });
+      });
   },
 };
 
