@@ -120,8 +120,9 @@ export default function App() {
 
           {message}
 
+          
           <form className={classes.form} noValidate>
-            <TextField
+          {stage!=="authenticated" && <TextField
               variant="outlined"
               margin="normal"
               required
@@ -133,7 +134,8 @@ export default function App() {
               autoFocus
               value={inputs.email}
               onChange={(e) => handleInputChange(e)}
-            />
+            />}
+            
 
             {stage === "login" && (
               <TextField
@@ -146,11 +148,12 @@ export default function App() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                onChange={(e) => handleInputChange(e)}
               />
             )}
 
-            {stage === "register" && (
-              <Register inputs={inputs} handleInputChange={handleInputChange} />
+            {stage === "register"  && (
+              <Register inputs={inputs} handleInputChange={(e) => handleInputChange(e)} />
             )}
 
             <FormControlLabel
