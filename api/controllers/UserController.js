@@ -72,7 +72,6 @@ const controllers = {
       { new: true } // returns the updated document
     )
       .then((updatedUser) => {
-        console.log(`Updated data is ${updatedUser}`);
         res.json({
           error: false,
           message: "Update was successeful.",
