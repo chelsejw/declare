@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-  full_name: { type: String, required: true, unique: true },
+  full_name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   ga_email: { type: String, required: true, unique: true },
   active: { type: Boolean, default: false }, // determines if server will automatically send requests,
