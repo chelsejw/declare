@@ -46,10 +46,6 @@ export default function App() {
     return;
   };
 
-  useEffect(() => {
-    console.log(`The stage is now ${stage}`);
-  }, [stage]);
-
   const checkUserRegistration = () => {
     axios
       .post("http://localhost:4000/exists", { email: inputs.email })
@@ -86,7 +82,7 @@ export default function App() {
         } else {
           setStage("authenticated");
           setInputs(userData);
-          setMessage(`You are authenticated, and may update your details.`);
+          setMessage(`You are authenticated and subscribed to the service. You may update your details below.`);
 
           setButtonText("Update");
         }
@@ -146,6 +142,11 @@ export default function App() {
   useEffect(() => {
     console.log(`Use effect inputs log`, inputs);
   }, [inputs]);
+
+  useEffect(() => {
+    console.log(`The stage is now ${stage}`);
+  }, [stage]);
+
 
   return (
     <Grid container component="main" className={classes.root}>

@@ -31,6 +31,19 @@ export default function Update({ inputs, handleInputChange }) {
         value={inputs.ga_email}
         onChange={(e) => handleInputChange(e)}
       />
+      <TextField
+        variant="outlined"
+        margin="normal"
+        required
+        fullWidth
+        id="mobile"
+        label="Contact Number"
+        name="mobile"
+        autoComplete="mobile"
+        autoFocus
+        value={inputs.mobile}
+        onChange={(e) => handleInputChange(e)}
+      />
       <Grid justify="space-between" container>
         <Grid item xs={10}>
           <Typography>
