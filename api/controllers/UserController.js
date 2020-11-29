@@ -79,7 +79,7 @@ const controllers = {
             full_name: updatedUser.full_name,
             active: updatedUser.active,
             mobile: updatedUser.mobile,
-            last_declared: user.last_declared,
+            last_declared: updatedUser.last_declared,
           },
         });
       })
