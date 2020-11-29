@@ -1,7 +1,8 @@
 const qs = require("qs");
 const axios = require("axios");
 
-function createPostRequest(userType, email, GAEmail, fullName, mobile) {
+const createPostRequest = (userType, user) => {
+  const {email, ga_email, mobile, full_name } = user
   const date = new Date();
   const currentDay = date.getDate();
   const currentMonth = date.getMonth() + 1;
@@ -11,9 +12,9 @@ function createPostRequest(userType, email, GAEmail, fullName, mobile) {
     ["entry.1315738832_month"]: currentMonth, // Month of submission
     ["entry.1315738832_day"]: currentDay, // Day of submission
     ["entry.2139343058"]: "SEIF 3", // Cohort Name (e.g. SEIF 3, DSI 18)
-    ["entry.350879435"]: fullName, // Name as per NRIC
+    ["entry.350879435"]: full_name, // Name as per NRIC
     ["entry.1443611571"]: mobile, // Contact Number
-    ["entry.88756219"]: GAEmail, // Email used to sign with GA
+    ["entry.88756219"]: ga_email, // Email used to sign with GA
     ["emailAddress"]: email, // Email
     ["entry.1464206896"]: "No",
     ["entry.748573793"]: "No",
@@ -27,7 +28,7 @@ function createPostRequest(userType, email, GAEmail, fullName, mobile) {
   };
 
   const testForm = {
-    ["entry.218682909"]: fullName,
+    ["entry.218682909"]: full_name,
     ["entry.376316146_year"]: currentYear,
     ["entry.376316146_month"]: currentMonth,
     ["entry.376316146_day"]: currentDay,
@@ -44,7 +45,13 @@ function createPostRequest(userType, email, GAEmail, fullName, mobile) {
     formData = qs.stringify(studentForm);
     postEndpoint = `https://docs.google.com/forms/u/2/d/e/1FAIpQLSfviLd5-9633aKQBAeVIS58rr0WCEO8irhjLYFHYgGBsN49iQ/formResponse`;
   }
-  return axios.post(postEndpoint, formData).catch((err) => console.log(err));
+  return axios
+  .post(postEndpoint, formData)
+    .then(_ => {
+      user.last_declared = date;
+      user.save()
+    })
+    .catch((err) => console.log(err));
 }
 
 module.exports = createPostRequest;
