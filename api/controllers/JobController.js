@@ -13,18 +13,17 @@ const callRequestInBatches = async (arrayOfPromises, batchSize) => {
 };
 
 const controller = {
-  testJob: (req, res) => {
+  testJob: () => {
     console.log(`Hi testing`);
   },
 
-  sendGoogleFormForActiveUsers: async (req, res) => {
+  sendGoogleFormForActiveUsers: async () => {
     const activeUsers = await UserModel.find( { active: true} );
     const allPostRequests = activeUsers.map((user) => {
       const { email, ga_email, full_name, mobile } = user
       return CreatePostRequest('test', email, ga_email, full_name, mobile);
     });
     callRequestInBatches(allPostRequests, 5);
-    res.send(`Complete`)
   },
 };
 
