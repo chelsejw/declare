@@ -1,8 +1,8 @@
 import React from "react";
-import { Grid, TextField, Typography } from "@material-ui/core";
+import { Grid, TextField, Typography, Box } from "@material-ui/core";
 import Switch from "@material-ui/core/Switch";
-
-export default function Update({ inputs, handleInputChange }) {
+import moment from 'moment';
+export default function Update({ inputs, handleInputChange, lastDeclared }) {
   return (
     <div>
       <TextField
@@ -44,21 +44,27 @@ export default function Update({ inputs, handleInputChange }) {
         value={inputs.mobile}
         onChange={(e) => handleInputChange(e)}
       />
-      <Grid justify="space-between" container>
-        <Grid item xs={10}>
-          <Typography>
-            Automatically send my all-clear declaration form every Monday.
-          </Typography>
+      <Box my={2}>
+        <Grid justify="space-between" container>
+          <Grid item xs={11}>
+            <Typography variant="h6">
+              Automatically send my all-clear declaration form every Monday.
+            </Typography>
+          </Grid>
+          <Grid item xs={1}>
+            <Switch
+              onChange={(e) => handleInputChange(e)}
+              name="active"
+              checked={inputs.active ? true : false}
+              inputProps={{ "aria-label": "secondary checkbox" }}
+            />
+          </Grid>
         </Grid>
-        <Grid item xs={2}>
-          <Switch
-            onChange={(e) => handleInputChange(e)}
-            name="active"
-            checked={inputs.active ? true : false}
-            inputProps={{ "aria-label": "secondary checkbox" }}
-          />
-        </Grid>
-      </Grid>
+      </Box>
+
+      <Typography variant="overline" display="block">
+        Last declared: {lastDeclared ? moment(lastDeclared).format("DD MMM YYYY, hh:mm:ss a") : "Never"}
+      </Typography>
     </div>
   );
 }

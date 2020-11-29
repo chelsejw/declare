@@ -82,7 +82,10 @@ export default function App() {
         } else {
           setStage("authenticated");
           setInputs(userData);
-          setMessage(`You are authenticated and subscribed to the service. You may update your details below.`);
+          setUser(userData);
+          setMessage(
+            `You are authenticated as ${userData.email}. You may update your details below.`
+          );
 
           setButtonText("Update");
         }
@@ -108,6 +111,7 @@ export default function App() {
         if (!error) {
           setStage("updated profile");
           setInputs({ ...inputs, ...userData });
+          setUser(userData);
         }
       })
       .catch((err) => {
@@ -127,7 +131,7 @@ export default function App() {
           const { email, full_name } = res.data.user;
           setUser({ ...user, email, full_name });
           setMessage(
-            `You are now registered as ${email}, and may update your details.`
+            `You are now registered as ${email}, and are subscribed to the service. You may turn off the service below.`
           );
           setButtonText("Update");
         } else {
@@ -140,13 +144,12 @@ export default function App() {
   };
 
   useEffect(() => {
-    console.log(`Use effect inputs log`, inputs);
-  }, [inputs]);
+    console.log(`Use effect user log`, user);
+  }, [user]);
 
   useEffect(() => {
     console.log(`The stage is now ${stage}`);
   }, [stage]);
-
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -198,6 +201,7 @@ export default function App() {
             {(stage === "authenticated" || stage === "updated profile") && (
               <Update
                 inputs={inputs}
+                lastDeclared={user.last_declared}
                 handleInputChange={(e) => handleInputChange(e)}
               />
             )}
