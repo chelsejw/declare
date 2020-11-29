@@ -5,6 +5,8 @@ const controllers = {
     // Check if user exists.
     const { email, password } = req.body;
 
+    delete req.body.active;
+
     if (await User.findOne({ email })) {
       res.json({ error: true, message: "Email is already in use." });
       return;
@@ -14,10 +16,11 @@ const controllers = {
 
     //
     const newUser = await User.create({ ...req.body, password: argon2Hash });
+    const { ga_email, full_name, mobile, active } = newUser;
     res.json({
       error: false,
       msg: "User create success.",
-      user: { email: newUser.email, full_name: newUser.full_name },
+      user: { email, ga_email, full_name, mobile, active },
     });
   },
 

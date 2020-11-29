@@ -1,16 +1,6 @@
 const UserModel = require("../models/user");
-const CreatePostRequest = require('./modules/CreatePostRequest')
-const callRequestInBatches = async (arrayOfPromises, batchSize) => {
-  console.log(`Starting to execute`);
-  let batchNum = 0;
-  while (arrayOfPromises.length > 0) {
-    batchNum++;
-    console.log(`Starting on batch number ${batchNum}`);
-    const batch = arrayOfPromises.splice(0, batchSize);
-    await Promise.all(batch);
-    console.log(`Resolved batch ${batchNum}`);
-  }
-};
+const CreatePostRequest = require('./modules/createPostRequest')
+const callRequestInBatches = require('./modules/callRequestInBatches')
 
 const controller = {
   testJob: () => {

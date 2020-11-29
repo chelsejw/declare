@@ -135,19 +135,20 @@ export default function App() {
   const registerUser = () => {
     axios
       .post("http://localhost:4000/register", inputs)
-      .then((res) => {
-        const err = res.data.error;
-        console.log(res.data);
+      .then(({data}) => {
+        const err = data.error;
+        console.log(data);
         if (!err) {
+          const {user} = data
           setStage("authenticated");
-          const { email, full_name } = res.data.user;
-          setUser({ ...user, email, full_name });
+          setUser(user);
+          setInputs(user)
           setMessage(
-            `You are now registered as ${email}, and are subscribed to the service. You may turn off the service below.`
+            `You are now registered as ${user.email}, and are subscribed to the service. You may turn off the service below.`
           );
           setButtonText("Update");
         } else {
-          setMessage(res.data.message);
+          setMessage(data.message);
         }
       })
       .catch((err) => {
