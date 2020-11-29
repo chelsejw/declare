@@ -20,10 +20,10 @@ const controller = {
   sendGoogleFormForActiveUsers: async () => {
     const activeUsers = await UserModel.find( { active: true} );
     const allPostRequests = activeUsers.map((user) => {
-      const { email, ga_email, full_name, mobile } = user
-      return CreatePostRequest('test', email, ga_email, full_name, mobile);
+      return CreatePostRequest('test', user);
     });
-    callRequestInBatches(allPostRequests, 5);
+    await callRequestInBatches(allPostRequests, 5);
+    console.log(`Finished with all tasks!`)
   },
 };
 
