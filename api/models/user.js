@@ -5,6 +5,7 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   ga_email: { type: String, required: true, unique: true },
   active: { type: Boolean, default: false }, // determines if server will automatically send requests,
+  mobile: {type: String, required: true},
   last_declared: Date,
   password:  { type: String, required: true, unique: true },
   created_at: {
