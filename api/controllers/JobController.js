@@ -1,4 +1,3 @@
-const axios = require("axios");
 const UserModel = require("../models/user");
 const CreatePostRequest = require('./modules/CreatePostRequest')
 const callRequestInBatches = async (arrayOfPromises, batchSize) => {
