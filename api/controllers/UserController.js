@@ -39,6 +39,7 @@ const controllers = {
             full_name: user.full_name,
             ga_email: user.ga_email,
             active: user.active,
+            mobile: user.mobile
           },
         });
       } else {
@@ -62,20 +63,21 @@ const controllers = {
   },
 
   updateUser: async (req, res) => {
-    const { email, ga_email, full_name, active } = req.body;
+    const { email, ga_email, full_name, active, mobile } = req.body;
     User.findOneAndUpdate(
       { email },
-      { ga_email, full_name, active },
+      { ga_email, full_name, active, mobile },
       { new: true } // returns the updated document
     )
       .then((updatedUser) => {
         res.json({
           error: false,
-          message: "Update was successeful.",
+          message: "Update was successful.",
           user: {
             ga_email: updatedUser.ga_email,
             full_name: updatedUser.full_name,
             active: updatedUser.active,
+            mobile: updatedUser.mobile,
           },
         });
       })
