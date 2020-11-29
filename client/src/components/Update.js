@@ -63,7 +63,7 @@ export default function Update({ inputs, handleInputChange, lastDeclared }) {
       </Box>
 
       <Typography variant="overline" display="block">
-        Last declared: {lastDeclared ? moment(lastDeclared).format("DD MMM YYYY, hh:mm:ss a") : "Never"}
+        Last declared: {lastDeclared ? <Typography variant="overline" display="inline" color="primary">{moment(lastDeclared).format("dddd, DD MMM YYYY, hh:mm:ss a")}</Typography> : "Never"}
       </Typography>
     </div>
   );

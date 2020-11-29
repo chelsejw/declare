@@ -10,13 +10,16 @@ import {
   Box,
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+// import LockOpenIcon from "@material-ui/icons/LockOpen";
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import FormStyle from "./styles/FormStyle";
 import Copyright from "./components/Copyright";
 import axios from "axios";
 import Register from "./components/Register";
 import Update from "./components/Update";
 import Login from "./components/Login";
-
+import Welcome from "./components/Welcome"
 const useStyles = FormStyle;
 
 export default function App() {
@@ -28,6 +31,7 @@ export default function App() {
     ga_email: "",
     full_name: "",
     active: false,
+    mobile: "",
   });
 
   const [stage, setStage] = useState("check email");
@@ -77,6 +81,7 @@ export default function App() {
       })
       .then((res) => {
         const { error, message: responseMessage, user: userData } = res.data;
+        console.log(userData, `from login`);
         if (error) {
           setMessage(responseMessage);
         } else {
@@ -96,27 +101,34 @@ export default function App() {
   };
 
   const updateUser = () => {
-    const { email, full_name, ga_email, active } = inputs;
+    const { email, full_name, ga_email, active, mobile } = inputs;
     axios
       .patch("http://localhost:4000/update", {
         email,
         full_name,
         ga_email,
         active,
+        mobile,
       })
       .then((res) => {
         const { error, message: responseMessage, user: userData } = res.data;
         console.log(res.data);
-        setMessage(responseMessage);
         if (!error) {
+          setMessage("Your profile was updated successfully.");
           setStage("updated profile");
           setInputs({ ...inputs, ...userData });
           setUser(userData);
+        } else {
+          setMessage(
+            "Something went wrong while trying to update your user. Reload the page and try again."
+          );
         }
       })
       .catch((err) => {
         console.log(err);
-        setMessage(err);
+        setMessage(
+          "Something went wrong while trying to update your user. Reload the page and try again."
+        );
       });
   };
 
@@ -151,20 +163,35 @@ export default function App() {
     console.log(`The stage is now ${stage}`);
   }, [stage]);
 
+  let mainIcon;
+
+  switch (stage) {
+    case "authenticated":
+      mainIcon = <AccountCircleIcon/>
+      break;
+    case "updated profile": 
+      mainIcon = <CheckCircleIcon/>
+      break;
+    default:
+      mainIcon = <LockOutlinedIcon/>
+  }
+
+
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
       <Grid item xs={false} sm={3} md={5} className={classes.image} />
       <Grid item xs={12} sm={9} md={7} component={Paper} elevation={6} square>
         <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
+          <Avatar className={classes.avatar}>{mainIcon}</Avatar>
           <Typography component="h1" variant="h5">
             {stage.toUpperCase()}
           </Typography>
 
-          {message}
+          <Typography variant="subtitle2" color="secondary" align="center">
+            {" "}
+            {message}{" "}
+          </Typography>
 
           <form className={classes.form} noValidate>
             {
@@ -233,7 +260,10 @@ export default function App() {
             >
               {buttonText}
             </Button>
+
             <Box mt={5}>
+              <Welcome />
+
               <Copyright />
             </Box>
           </form>
