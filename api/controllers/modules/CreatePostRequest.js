@@ -1,4 +1,6 @@
 const qs = require("qs");
+const axios = require("axios");
+
 function createPostRequest(userType, email, GAEmail, fullName, mobile) {
   const date = new Date();
   const currentDay = date.getDate();
@@ -26,9 +28,9 @@ function createPostRequest(userType, email, GAEmail, fullName, mobile) {
 
   const testForm = {
     ["entry.218682909"]: fullName,
-    ["entry.376316146_year"]: year,
-    ["entry.376316146_month"]: month,
-    ["entry.376316146_day"]: day,
+    ["entry.376316146_year"]: currentYear,
+    ["entry.376316146_month"]: currentMonth,
+    ["entry.376316146_day"]: currentDay,
     ["entry.1944830854"]: "Yes",
     ["emailAddress"]: email,
   };
