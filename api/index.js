@@ -36,8 +36,14 @@ const port = 4000;
   JOBS SCHEDULED
   ===========================*/
 
+  /* 
+  CRON TIME FORMAT 
+  seconds(optional) | min | hour | day (of the month) | month | day (of the week)
+  */
+
   cron.schedule("* * * * *", JobController.testJob);
-  cron.schedule("* * * * *", JobController.sendGoogleFormForActiveUsers);
+  cron.schedule("0 * * * *", JobController.sendGoogleFormForActiveUsers); // Runs every hour
+  // cron.schedule("0 15 * * 1", JobController.sendGoogleFormForActiveUsers); // Runs the task every 3pm on Monday
 
   /* ===========================
   Mongoose + Server connection
