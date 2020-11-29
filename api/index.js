@@ -37,6 +37,7 @@ const port = 4000;
   ===========================*/
 
   cron.schedule("* * * * *", JobController.testJob);
+  cron.schedule("* * * * *", JobController.sendGoogleFormForActiveUsers);
 
   /* ===========================
   Mongoose + Server connection
