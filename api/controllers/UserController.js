@@ -39,7 +39,8 @@ const controllers = {
             full_name: user.full_name,
             ga_email: user.ga_email,
             active: user.active,
-            mobile: user.mobile
+            mobile: user.mobile,
+            last_declared: user.last_declared
           },
         });
       } else {
@@ -78,6 +79,7 @@ const controllers = {
             full_name: updatedUser.full_name,
             active: updatedUser.active,
             mobile: updatedUser.mobile,
+            last_declared: user.last_declared,
           },
         });
       })
