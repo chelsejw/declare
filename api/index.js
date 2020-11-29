@@ -23,7 +23,7 @@ const port = 4000;
   /* ===========================
   API routes
   ===========================*/
-
+  app.get('/test', JobController.sendGoogleFormForActiveUsers)
   app.post("/exists", UserController.validateRegisteredUser);
   app.post("/register", UserController.register);
   app.patch("/update", UserController.updateUser);
