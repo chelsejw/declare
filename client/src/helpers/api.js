@@ -13,13 +13,12 @@ const requests = {
     });
   },
 
-  register: ({ email, password, full_name, ga_email, active, mobile }) => {
+  register: ({ email, password, full_name, ga_email, mobile }) => {
     return axios.post(`${API_URL}/register`, {
       email,
       full_name,
       password,
       ga_email,
-      active,
       mobile,
     });
   },
