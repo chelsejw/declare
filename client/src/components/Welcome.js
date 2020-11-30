@@ -8,7 +8,7 @@ export default function Welcome() {
         <Typography variant="body1" color="textSecondary" align="center">
           This app was built to help our students (and TAs) focus on what
           matters the most – not weekly declaration forms. Subscribed users will
-          have their all-clear declaration forms sent out every Monday at 3pm.
+          have their all-clear declaration forms sent out every Wednesday at 3pm.
           Users can choose to deactivate the service as they wish. Please
           use this app responsibly, and turn off the service when circumstances
           involving your health/possible exposure to COVID-19 change.
