@@ -66,7 +66,7 @@ const port = 4000;
       });
     })
     .catch((err) => {
-      console.log(err);
+      console.error(err);
       console.log(
         `Error while trying to connect to ${
           usingLocalDB ? "local" : "atlas"
