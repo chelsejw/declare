@@ -1,5 +1,6 @@
 import axios from "axios";
-const API_URL = "http://localhost:4000";
+import {API_URL} from '../constants';
+
 const requests = {
   checkEmail: (email) => {
     return axios.post(`${API_URL}/exists`, { email });
