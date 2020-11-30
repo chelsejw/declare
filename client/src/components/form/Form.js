@@ -4,9 +4,9 @@ import {
   TextField,
   Button,
 } from "@material-ui/core";
-import Register from "./components/Register";
-import Update from "./components/Update";
-import Login from "./components/Login";
+import Register from "./Register";
+import Update from "./Update";
+import Login from "./Login";
 import ScaleLoader from "react-spinners/ScaleLoader";
 
 export default function Form ({classes, stage, inputs, handleInputChange, updateUser, loading, profileChanged, loginUser, user, checkIfUserExists, registerUser, buttonText}) {

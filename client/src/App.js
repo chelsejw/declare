@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Paper, Grid, CssBaseline, Box } from "@material-ui/core";
 import { isEqual } from "lodash";
 import AuthHeader from "./components/AuthHeader";
-import Form from "./Form";
+import Form from "./components/form/Form";
 import FormStyle from "./styles/FormStyle";
 import Copyright from "./components/Copyright";
 import Welcome from "./components/Welcome";
