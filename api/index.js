@@ -42,8 +42,8 @@ const port = 4000;
   */
 
   cron.schedule("* * * * *", JobController.testJob);
-  cron.schedule("0 * * * *", JobController.sendGoogleFormForActiveUsers); // Runs every hour
-  // cron.schedule("0 15 * * 1", JobController.sendGoogleFormForActiveUsers); // Runs the task every 3pm on Monday
+  // cron.schedule(ENV.SCHEDULED_TIME_TO_RUN, JobController.sendGoogleFormForActiveUsers); // Runs every hour
+  cron.schedule(ENV.SCHEDULED_TIME_TO_RUN, JobController.sendGoogleFormForActiveUsers); // Runs the task every 3pm on Monday
 
   /* ===========================
   Mongoose + Server connection
