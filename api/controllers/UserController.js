@@ -1,18 +1,18 @@
 const User = require("../models/user");
 const argon2 = require("argon2");
 
-const errorHandler = (res, err, message) => {
+const errorHandler = (res, errData, message) => {
   let response = {};
-  console.error(err);
+  console.error(errData);
   response.message = message;
   res.status(500);
   response.error = true;
   res.json(response);
 };
 
-const setResponse = (res, err, message, userData, existsField) => {
+const setResponse = (res, errorExists, message, userData, existsField) => {
   let response = {};
-  response.error = err;
+  response.error = errorExists;
   response.message = message;
   if (userData) {
     response.user = userData;
