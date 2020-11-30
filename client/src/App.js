@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Paper, Grid, CssBaseline, Box } from "@material-ui/core";
-import isEqual from 'lodash.isequal';
-import omit from 'lodash.omit';
+import isEqual from "lodash.isequal";
+import omit from "lodash.omit";
 import AuthHeader from "./components/AuthHeader";
 import Form from "./components/form/Form";
 import FormStyle from "./styles/FormStyle";
@@ -50,6 +50,66 @@ export default function App() {
     setLoading(false);
   };
 
+  const responseHandler = (data) => {
+    setLoading(false);
+    const { error, responseMessage } = data;
+    
+    if (error) {
+      setMessage(responseMessage);
+      return;
+    }
+
+    if (stage === CHECK_EMAIL) {
+      const { exists } = data;
+      if (exists) {
+        // If user exists, user should login.
+        setStage(LOGIN);
+        setButtonText("Check Password");
+        setMessage("This email is registered. Enter your password");
+      } else {
+        // If user doesn't exist, user should register.
+        setStage(REGISTER);
+        setButtonText("Register");
+        setMessage(
+          "Email does not exist in our database. Register for the service"
+        );
+      }
+      return;
+    }
+
+    const { user: userData } = data;
+
+    if (stage === LOGIN) {
+      syncInputsAndUserProfile(userData);
+      setStage(AUTHENTICATED);
+      setMessage(
+        `You are authenticated as ${userData.email}. You may update your details below.`
+      );
+      setButtonText("Update");
+      return;
+    }
+
+    if (stage === REGISTER) {
+      setStage(AUTHENTICATED);
+      syncInputsAndUserProfile(userData);
+      setMessage(
+        `You are now registered as ${userData.email}, and are subscribed to the service. You may turn off the service below.`
+      );
+      setButtonText("Registration successful!");
+      setProfileChanged(false);
+      return
+    }
+
+    if (stage === AUTHENTICATED || stage === UPDATED) {
+      setMessage("Your profile was updated successfully.");
+      syncInputsAndUserProfile(userData);
+      setStage(UPDATED);
+      setButtonText(UPDATED_TEXT);
+      setProfileChanged(false);
+      return
+    }
+  };
+
   const handleInputChange = (e) => {
     if (e.target.name === "active") {
       setInputs({ ...inputs, active: !inputs.active });
@@ -65,19 +125,7 @@ export default function App() {
     requests
       .checkEmail(email)
       .then(({ data }) => {
-        setLoading(false);
-        const { exists } = data;
-        if (exists) {
-          setStage(LOGIN);
-          setButtonText("Check Password");
-          setMessage("This email is registered. Enter your password");
-        } else {
-          setStage(REGISTER);
-          setButtonText("Register");
-          setMessage(
-            "Email does not exist in our database. Register for the service"
-          );
-        }
+        responseHandler(data);
       })
       .catch((err) => {
         handleRequestError(
@@ -90,22 +138,10 @@ export default function App() {
   const loginUser = () => {
     setLoading(true);
     const { email, password } = inputs;
-
     requests
       .login(email, password)
       .then(({ data }) => {
-        setLoading(false);
-        const { error, message: responseMessage, user: userData } = data;
-        if (error) {
-          setMessage(responseMessage);
-          return;
-        }
-        syncInputsAndUserProfile(userData);
-        setStage(AUTHENTICATED);
-        setMessage(
-          `You are authenticated as ${userData.email}. You may update your details below.`
-        );
-        setButtonText("Update");
+        responseHandler(data);
       })
       .catch((err) => {
         handleRequestError(
@@ -120,25 +156,12 @@ export default function App() {
     requests
       .update(inputs)
       .then(({ data }) => {
-        const { error, user: userData } = data;
-        if (!error) {
-          setLoading(false);
-          setMessage("Your profile was updated successfully.");
-          syncInputsAndUserProfile(userData);
-          setStage(UPDATED);
-          setButtonText(UPDATED_TEXT);
-          setProfileChanged(false);
-        } else {
-          setLoading(false);
-          setMessage(
-            "Something went wrong while trying to update your user. Reload the page and try again."
-          );
-        }
+        responseHandler(data);
       })
       .catch((err) => {
         handleRequestError(
           err,
-          "There was an error while trying to update your user. Reload the page and try again."
+          `There was an error while trying to update your user. Reload the page and try again.`
         );
       });
   };
@@ -148,20 +171,7 @@ export default function App() {
     requests
       .register(inputs)
       .then(({ data }) => {
-        setTimeout(setLoading(false), 800);
-        const { error, responseMessage } = data;
-        if (!error) {
-          const { user: userData } = data;
-          setStage(AUTHENTICATED);
-          syncInputsAndUserProfile(userData);
-          setMessage(
-            `You are now registered as ${userData.email}, and are subscribed to the service. You may turn off the service below.`
-          );
-          setButtonText("Registration successful!");
-          setProfileChanged(false)
-        } else {
-          handleRequestError(error, responseMessage);
-        }
+        responseHandler(data);
       })
       .catch((err) => {
         handleRequestError(
