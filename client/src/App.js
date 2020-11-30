@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Paper, Grid, CssBaseline, Box } from "@material-ui/core";
-import { isEqual, omit } from "lodash";
+import isEqual from 'lodash.isequal';
+import omit from 'lodash.omit';
 import AuthHeader from "./components/AuthHeader";
 import Form from "./components/form/Form";
 import FormStyle from "./styles/FormStyle";
