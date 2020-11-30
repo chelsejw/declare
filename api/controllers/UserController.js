@@ -4,9 +4,6 @@ const controllers = {
   register: async (req, res) => {
     // Check if user exists.
     const { email, password } = req.body;
-
-    delete req.body.active;
-
     if (await User.findOne({ email })) {
       res.json({ error: true, message: "Email is already in use." });
       return;
