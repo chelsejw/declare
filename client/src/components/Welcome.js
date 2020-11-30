@@ -10,8 +10,8 @@ export default function Welcome() {
           matters the most – not weekly declaration forms. Subscribed users will
           have their all-clear declaration forms sent out every Monday at 3pm.
           Users can choose to deactivate the service as they wish. Please
-          exercise responsibility and turn off the service when circumstances
-          involving your health change.
+          use this app responsibly, and turn off the service when circumstances
+          involving your health/possible exposure to COVID-19 change.
         </Typography>
       </Box>
       <Box mb={2}>
