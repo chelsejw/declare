@@ -8,6 +8,7 @@ import Register from "./Register";
 import Update from "./Update";
 import Login from "./Login";
 import ScaleLoader from "react-spinners/ScaleLoader";
+import {CHECK_EMAIL, UPDATED, AUTHENTICATED, LOGIN, REGISTER} from '../../constants'
 
 export default function Form ({classes, stage, inputs, handleInputChange, updateUser, loading, profileChanged, loginUser, user, checkIfUserExists, registerUser, buttonText}) {
   return (
@@ -21,7 +22,7 @@ export default function Form ({classes, stage, inputs, handleInputChange, update
             id="email"
             label="Email Address"
             name="email"
-            disabled={stage !== "check email" ? true : false}
+            disabled={stage !== CHECK_EMAIL ? true : false}
             autoComplete="email"
             autoFocus
             value={inputs.email}
@@ -29,21 +30,21 @@ export default function Form ({classes, stage, inputs, handleInputChange, update
           />
       }
 
-      {stage === "login" && (
+      {stage === LOGIN && (
         <Login
           inputs={inputs}
           handleInputChange={(e) => handleInputChange(e)}
         />
       )}
 
-      {stage === "register" && (
+      {stage === REGISTER && (
         <Register
           inputs={inputs}
           handleInputChange={(e) => handleInputChange(e)}
         />
       )}
 
-      {(stage === "authenticated" || stage === "updated profile") && (
+      {(stage === AUTHENTICATED || stage === UPDATED) && (
         <Update
           inputs={inputs}
           lastDeclared={user.last_declared}
@@ -59,23 +60,23 @@ export default function Form ({classes, stage, inputs, handleInputChange, update
         className={classes.submit}
         disabled={
           loading ||
-          ((stage === "updated profile" || stage === "authenticated") &&
+          ((stage === UPDATED || stage === AUTHENTICATED) &&
             !profileChanged)
         } // If loading is true, no other requests should be sent.
         onClick={(e) => {
           e.preventDefault();
           switch (stage) {
-            case "check email":
+            case CHECK_EMAIL:
               checkIfUserExists();
               break;
-            case "login":
+            case LOGIN:
               loginUser();
               break;
-            case "register":
+            case REGISTER:
               registerUser();
               break;
-            case "authenticated":
-            case "updated profile":
+            case AUTHENTICATED:
+            case UPDATED:
               updateUser();
               break;
             default:
