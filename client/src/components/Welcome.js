@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Typography, Box } from "@material-ui/core";
+import { Typography, Box, Link } from "@material-ui/core";
 export default function Welcome() {
   return (
     <div>
@@ -16,8 +16,11 @@ export default function Welcome() {
       </Box>
       <Box mb={2}>
         <Typography variant="body1" color="textSecondary" align="center">
-          Having problems with the app? You can reach me on slack (Chelsea E.)
-          or email (chelsejw@gmail.com)
+          You can contribute to this application on{" "}
+          <Link color="textPrimary" href="https://github.com/chelsejw/declare">
+            Github
+          </Link>
+          .
         </Typography>
       </Box>
     </div>

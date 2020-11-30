@@ -111,7 +111,7 @@ export default function App() {
         mobile,
       })
       .then((res) => {
-        const { error, message: responseMessage, user: userData } = res.data;
+        const { error, user: userData } = res.data;
         console.log(res.data);
         if (!error) {
           setMessage("Your profile was updated successfully.");
@@ -139,10 +139,10 @@ export default function App() {
         const err = data.error;
         console.log(data);
         if (!err) {
-          const {user} = data
+          const {userData} = data
           setStage("authenticated");
-          setUser(user);
-          setInputs(user)
+          setUser(userData);
+          setInputs(userData);
           setMessage(
             `You are now registered as ${user.email}, and are subscribed to the service. You may turn off the service below.`
           );

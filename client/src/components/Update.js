@@ -45,9 +45,9 @@ export default function Update({ inputs, handleInputChange, lastDeclared }) {
         onChange={(e) => handleInputChange(e)}
       />
       <Box my={2}>
-        <Grid justify="space-between" container>
+        <Grid justify="space-between" container alignItems="center">
           <Grid item xs={11}>
-            <Typography variant="h6">
+            <Typography variant="subtitle1" align="right">
               Automatically send my all-clear declaration form every Monday.
             </Typography>
           </Grid>
