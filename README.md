@@ -2,10 +2,11 @@
 
 An app to automatically send the GA declaration form every week at a specified time, for the subscribed users.
 
-## Technologies: Backend
+## Notable Technologies: Backend
 - Express
+- Cron (node-cron): for scheduling tasks to run
 
-## Technologies: Frontend
+## Notable Technologies: Frontend
 - React
 - Material UI
 
@@ -24,7 +25,6 @@ To start either app, do `npm start` or `yarn start` from their respective root f
 ✅  Setup frontend for basic authentication & CRUD (without sessions/cookies/JWT)
 
 ✅  Setup backend for CRUD (is delete necessary?)
-
 
 ✅  Setup backend to send forms periodically
 
