@@ -16,7 +16,6 @@ const port = 4000;
   /* ===========================
   Express middleware configuration
   ===========================*/
-
   app.use(cors());
   app.use(express.json());
 
@@ -43,8 +42,7 @@ const port = 4000;
 
   cron.schedule("* * * * *", JobController.testJob);
   // cron.schedule(ENV.SCHEDULED_TIME_TO_RUN, JobController.sendGoogleFormForActiveUsers); // Runs every hour
-  cron.schedule(ENV.SCHEDULED_TIME_TO_RUN, JobController.sendGoogleFormForActiveUsers); // Runs the task every 3pm on Monday
-
+  cron.schedule(ENV.SCHEDULED_TIME_TO_RUN, JobController.sendGoogleFormForActiveUsers); // Runs the task according to timing specified on env file
   /* ===========================
   Mongoose + Server connection
   ===========================*/
@@ -63,6 +61,8 @@ const port = 4000;
 
       app.listen(process.env.PORT || port, () => {
         console.log(`Declare app listening on port: ${port}`);
+        console.log(`Current scheduled time to send declarations is`, ENV.SCHEDULED_TIME_TO_RUN);
+
       });
     })
     .catch((err) => {
