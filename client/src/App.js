@@ -9,9 +9,10 @@ import {
   Button,
   Box,
 } from "@material-ui/core";
+
+import { isEqual } from "lodash";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-// import LockOpenIcon from "@material-ui/icons/LockOpen";
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import FormStyle from "./styles/FormStyle";
 import Copyright from "./components/Copyright";
@@ -19,12 +20,14 @@ import axios from "axios";
 import Register from "./components/Register";
 import Update from "./components/Update";
 import Login from "./components/Login";
-import Welcome from "./components/Welcome"
+import Welcome from "./components/Welcome";
+import ScaleLoader from "react-spinners/ScaleLoader";
+const updatedText = "Successfully updated your profile!";
+
 const useStyles = FormStyle;
 
 export default function App() {
   const classes = useStyles();
-
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
@@ -40,6 +43,8 @@ export default function App() {
   );
   const [buttonText, setButtonText] = useState("Check Email");
   const [user, setUser] = useState({ email: "" });
+  const [loading, setLoading] = useState(false);
+  const [profileChanged, setProfileChanged] = useState(false);
 
   const handleInputChange = (e) => {
     if (e.target.name === "active") {
@@ -50,11 +55,13 @@ export default function App() {
     return;
   };
 
-  const checkUserRegistration = () => {
+  const checkIfUserExists = () => {
+    setLoading(true);
     axios
       .post("http://localhost:4000/exists", { email: inputs.email })
-      .then((res) => {
-        const exists = res.data.exists;
+      .then(({ data }) => {
+        setLoading(false);
+        const { exists } = data;
         if (exists) {
           setStage("login");
           setButtonText("Check Password");
@@ -68,40 +75,49 @@ export default function App() {
         }
       })
       .catch((err) => {
-        console.log(err, "There was an error");
+        setLoading(false);
+        setMessage("There was an error. Reload the page and try again.");
+        console.error(err, "There was an error");
       });
   };
 
   const loginUser = () => {
-    console.log(`In login`);
+    setLoading(true);
+
     axios
       .post("http://localhost:4000/login", {
         email: inputs.email,
         password: inputs.password,
       })
-      .then((res) => {
-        const { error, message: responseMessage, user: userData } = res.data;
-        console.log(userData, `from login`);
+      .then(({ data }) => {
+        setLoading(false);
+        const { error, message: responseMessage, user: userData } = data;
+        // console.log(userData, `from login`);
         if (error) {
           setMessage(responseMessage);
         } else {
           setStage("authenticated");
-          setInputs(userData);
-          setUser(userData);
+          console.log(`My user data is...`);
+          console.log(userData);
+          setUser({ ...inputs, ...userData });
+          setInputs({ ...inputs, ...userData });
           setMessage(
             `You are authenticated as ${userData.email}. You may update your details below.`
           );
-
           setButtonText("Update");
         }
       })
       .catch((err) => {
+        setLoading(false);
+        setMessage("Something went wrong. Reload the page and try again.");
+
         console.log(err, "There was an error");
       });
   };
 
   const updateUser = () => {
     const { email, full_name, ga_email, active, mobile } = inputs;
+    setLoading(true);
     axios
       .patch("http://localhost:4000/update", {
         email,
@@ -110,22 +126,26 @@ export default function App() {
         active,
         mobile,
       })
-      .then((res) => {
-        const { error, user: userData } = res.data;
-        console.log(res.data);
+      .then(({ data }) => {
+        const { error, user: userData } = data;
+        setProfileChanged(false);
+        // console.log(res.data);
         if (!error) {
+          setLoading(false);
           setMessage("Your profile was updated successfully.");
           setStage("updated profile");
+          setUser({ ...inputs, ...userData });
           setInputs({ ...inputs, ...userData });
-          setUser(userData);
+          setButtonText(updatedText);
         } else {
+          setLoading(false);
           setMessage(
             "Something went wrong while trying to update your user. Reload the page and try again."
           );
         }
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
         setMessage(
           "Something went wrong while trying to update your user. Reload the page and try again."
         );
@@ -133,18 +153,20 @@ export default function App() {
   };
 
   const registerUser = () => {
+    setLoading(true);
     axios
       .post("http://localhost:4000/register", inputs)
-      .then(({data}) => {
+      .then(({ data }) => {
+        setTimeout(setLoading(false), 800);
         const err = data.error;
         console.log(data);
         if (!err) {
-          const {userData} = data
+          const { user: userData } = data;
           setStage("authenticated");
-          setUser(userData);
-          setInputs(userData);
+          setUser({ ...inputs, ...userData });
+          setInputs({ ...inputs, ...userData });
           setMessage(
-            `You are now registered as ${user.email}, and are subscribed to the service. You may turn off the service below.`
+            `You are now registered as ${userData.email}, and are subscribed to the service. You may turn off the service below.`
           );
           setButtonText("Update");
         } else {
@@ -152,31 +174,60 @@ export default function App() {
         }
       })
       .catch((err) => {
-        console.log(err, "There was an error");
+        setLoading(false);
+        console.error(err, "There was an error");
       });
   };
 
-  useEffect(() => {
-    console.log(`Use effect user log`, user);
-  }, [user]);
+  // useEffect(() => {
+  //   console.log(`Use effect user log`, user);
+  // }, [user]);
 
   useEffect(() => {
-    console.log(`The stage is now ${stage}`);
-  }, [stage]);
+    // if (
+    //   (stage === "updated profile" || stage === "authenticated") && !profileChanged) {
+    //   console.log(`Toggled profile changed`);
+    //   setProfileChanged(true);
+    //   setButtonText("Update");
+    // }
+    // console.log(`Inputs`);
+    // console.log(inputs);
+    // console.log(`User`);
+    // console.log(user);
+    // console.log(`Stage`);
+
+    // console.log(stage);
+
+    // console.log(`Are user and inputs the same?`, isEqual(inputs, user));
+
+    if (!isEqual(inputs, user)) {
+      setButtonText("Update")
+      setProfileChanged(true);
+      return;
+    }
+    setProfileChanged(false);
+  }, [inputs]);
+
+  // useEffect(() => {
+  //   console.log(`profileChange?`, profileChanged);
+  // }, [profileChanged]);
+
+  // useEffect(() => {
+  //   console.log(`The stage is now ${stage}`);
+  // }, [stage]);
 
   let mainIcon;
 
   switch (stage) {
     case "authenticated":
-      mainIcon = <AccountCircleIcon/>
+      mainIcon = <AccountCircleIcon />;
       break;
-    case "updated profile": 
-      mainIcon = <CheckCircleIcon/>
+    case "updated profile":
+      mainIcon = <CheckCircleIcon />;
       break;
     default:
-      mainIcon = <LockOutlinedIcon/>
+      mainIcon = <LockOutlinedIcon />;
   }
-
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -233,17 +284,23 @@ export default function App() {
                 handleInputChange={(e) => handleInputChange(e)}
               />
             )}
+
             <Button
               type="submit"
               fullWidth
               variant="contained"
               color="primary"
               className={classes.submit}
+              disabled={
+                loading ||
+                ((stage === "updated profile" || stage === "authenticated") &&
+                  !profileChanged)
+              } // If loading is true, no other requests should be sent.
               onClick={(e) => {
                 e.preventDefault();
                 switch (stage) {
                   case "check email":
-                    checkUserRegistration();
+                    checkIfUserExists();
                     break;
                   case "login":
                     loginUser();
@@ -256,10 +313,17 @@ export default function App() {
                     updateUser();
                     break;
                   default:
+                    return;
                 }
               }}
             >
-              {buttonText}
+              {loading ? (
+                <Grid item>
+                  <ScaleLoader size={20} loading={loading} />
+                </Grid>
+              ) : (
+                buttonText
+              )}
             </Button>
 
             <Box mt={5}>
