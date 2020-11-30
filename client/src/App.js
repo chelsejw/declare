@@ -2,18 +2,14 @@ import React, { useEffect, useState } from "react";
 import {
   Paper,
   Grid,
-  Typography,
   TextField,
   CssBaseline,
-  Avatar,
   Button,
   Box,
 } from "@material-ui/core";
-
+import Form from './Form'
 import { isEqual } from "lodash";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import CheckCircleIcon from "@material-ui/icons/CheckCircle";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import AuthHeader from './components/AuthHeader'
 import FormStyle from "./styles/FormStyle";
 import Copyright from "./components/Copyright";
 import axios from "axios";
@@ -110,8 +106,7 @@ export default function App() {
       .catch((err) => {
         setLoading(false);
         setMessage("Something went wrong. Reload the page and try again.");
-
-        console.log(err, "There was an error");
+        console.error(err, "There was an error");
       });
   };
 
@@ -184,50 +179,16 @@ export default function App() {
   // }, [user]);
 
   useEffect(() => {
-    // if (
-    //   (stage === "updated profile" || stage === "authenticated") && !profileChanged) {
-    //   console.log(`Toggled profile changed`);
-    //   setProfileChanged(true);
-    //   setButtonText("Update");
-    // }
-    // console.log(`Inputs`);
-    // console.log(inputs);
-    // console.log(`User`);
-    // console.log(user);
-    // console.log(`Stage`);
-
-    // console.log(stage);
-
-    // console.log(`Are user and inputs the same?`, isEqual(inputs, user));
-
-    if (!isEqual(inputs, user)) {
-      setButtonText("Update")
-      setProfileChanged(true);
-      return;
+    if (stage==="authenticated" || stage==="updated profile") {
+      if (!isEqual(inputs, user)) {
+        setButtonText("Update");
+        setProfileChanged(true);
+        return;
+      }
+      setProfileChanged(false);
     }
-    setProfileChanged(false);
+    
   }, [inputs]);
-
-  // useEffect(() => {
-  //   console.log(`profileChange?`, profileChanged);
-  // }, [profileChanged]);
-
-  // useEffect(() => {
-  //   console.log(`The stage is now ${stage}`);
-  // }, [stage]);
-
-  let mainIcon;
-
-  switch (stage) {
-    case "authenticated":
-      mainIcon = <AccountCircleIcon />;
-      break;
-    case "updated profile":
-      mainIcon = <CheckCircleIcon />;
-      break;
-    default:
-      mainIcon = <LockOutlinedIcon />;
-  }
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -235,103 +196,15 @@ export default function App() {
       <Grid item xs={false} sm={3} md={5} className={classes.image} />
       <Grid item xs={12} sm={9} md={7} component={Paper} elevation={6} square>
         <div className={classes.paper}>
-          <Avatar className={classes.avatar}>{mainIcon}</Avatar>
-          <Typography component="h1" variant="h5">
-            {stage.toUpperCase()}
-          </Typography>
+          <AuthHeader classes={classes} stage={stage} message={message} />
 
-          <Typography variant="subtitle2" color="secondary" align="center">
-            {" "}
-            {message}{" "}
-          </Typography>
+          <Form classes={classes} stage={stage} message={message} checkIfUserExists={checkIfUserExists} registerUser={registerUser} loginUser={loginUser} loading={loading} profileChanged={profileChanged} updateUser={updateUser} handleInputChange={handleInputChange} inputs={inputs} user={user} buttonText={buttonText}/>
 
-          <form className={classes.form} noValidate>
-            {
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                disabled={stage !== "check email" ? true : false}
-                autoComplete="email"
-                autoFocus
-                value={inputs.email}
-                onChange={(e) => handleInputChange(e)}
-              />
-            }
+          <Box mt={5}>
+            <Welcome />
 
-            {stage === "login" && (
-              <Login
-                inputs={inputs}
-                handleInputChange={(e) => handleInputChange(e)}
-              />
-            )}
-
-            {stage === "register" && (
-              <Register
-                inputs={inputs}
-                handleInputChange={(e) => handleInputChange(e)}
-              />
-            )}
-
-            {(stage === "authenticated" || stage === "updated profile") && (
-              <Update
-                inputs={inputs}
-                lastDeclared={user.last_declared}
-                handleInputChange={(e) => handleInputChange(e)}
-              />
-            )}
-
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              disabled={
-                loading ||
-                ((stage === "updated profile" || stage === "authenticated") &&
-                  !profileChanged)
-              } // If loading is true, no other requests should be sent.
-              onClick={(e) => {
-                e.preventDefault();
-                switch (stage) {
-                  case "check email":
-                    checkIfUserExists();
-                    break;
-                  case "login":
-                    loginUser();
-                    break;
-                  case "register":
-                    registerUser();
-                    break;
-                  case "authenticated":
-                  case "updated profile":
-                    updateUser();
-                    break;
-                  default:
-                    return;
-                }
-              }}
-            >
-              {loading ? (
-                <Grid item>
-                  <ScaleLoader size={20} loading={loading} />
-                </Grid>
-              ) : (
-                buttonText
-              )}
-            </Button>
-
-            <Box mt={5}>
-              <Welcome />
-
-              <Copyright />
-            </Box>
-          </form>
+            <Copyright />
+          </Box>
         </div>
       </Grid>
     </Grid>
