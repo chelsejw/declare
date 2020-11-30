@@ -7,8 +7,10 @@ import FormStyle from "./styles/FormStyle";
 import Copyright from "./components/Copyright";
 import Welcome from "./components/Welcome";
 import requests from "./helpers/api";
-
 const UPDATED_TEXT = "Successfully updated your profile!";
+const CHECK_EMAIL = "check email";
+const AUTHENTICATED = "authenticated";
+const UPDATED = "updated profile";
 const useStyles = FormStyle;
 
 export default function App() {
@@ -22,18 +24,36 @@ export default function App() {
     mobile: "",
   });
 
-  const [stage, setStage] = useState("check email");
+  const [stage, setStage] = useState(CHECK_EMAIL);
   const [message, setMessage] = useState(
     "Enter your email to see if it's in the database."
   );
-  const [buttonText, setButtonText] = useState("Check Email");
+  const [buttonText, setButtonText] = useState(CHECK_EMAIL);
   const [user, setUser] = useState({ email: "" });
   const [loading, setLoading] = useState(false);
   const [profileChanged, setProfileChanged] = useState(false);
 
   const syncInputsAndUserProfile = (updatedData) => {
-    setInputs((prev) => ({ ...prev, updatedData }));
-    setUser((prev) => ({ ...prev, updatedData }));
+    setInputs((prev) => ({ ...prev, ...updatedData }));
+    setUser((prev) => ({ ...prev, ...updatedData }));
+  };
+
+  // useEffect(()=> {
+  //   console.log(`Inputs updated`)
+  //   console.log(inputs)
+  // }, [inputs])
+
+  // const handleResponses = (res) => {
+  //   if (stage===CHECK_EMAIL) {
+
+  //   }
+
+  // }
+
+  const handleRequestError = (err, errorMessage) => {
+    console.error(err);
+    setMessage(errorMessage);
+    setLoading(false);
   };
 
   const handleInputChange = (e) => {
@@ -66,9 +86,10 @@ export default function App() {
         }
       })
       .catch((err) => {
-        setLoading(false);
-        setMessage("There was an error. Reload the page and try again.");
-        console.error(err, "There was an error");
+        handleRequestError(
+          err,
+          "There was an error. Reload the page and try again."
+        );
       });
   };
 
@@ -81,22 +102,26 @@ export default function App() {
       .then(({ data }) => {
         setLoading(false);
         const { error, message: responseMessage, user: userData } = data;
+        console.log(`The data I got back`);
+        console.log(userData);
         // console.log(userData, `from login`);
         if (error) {
           setMessage(responseMessage);
-        } else {
-          setStage("authenticated");
-          syncInputsAndUserProfile(userData);
-          setMessage(
-            `You are authenticated as ${userData.email}. You may update your details below.`
-          );
-          setButtonText("Update");
+          return;
         }
+        setStage(AUTHENTICATED);
+        syncInputsAndUserProfile(userData);
+        setMessage(
+          `You are authenticated as ${userData.email}. You may update your details below.`
+        );
+        setButtonText("Update");
+
       })
       .catch((err) => {
-        setLoading(false);
-        setMessage("Something went wrong. Reload the page and try again.");
-        console.error(err, "There was an error");
+        handleRequestError(
+          err,
+          "There was an error. Reload the page and try again."
+        );
       });
   };
 
@@ -106,11 +131,13 @@ export default function App() {
       .update(inputs)
       .then(({ data }) => {
         const { error, user: userData } = data;
+        console.log(`The data I got back`);
+        console.log(userData);
         setProfileChanged(false);
         if (!error) {
           setLoading(false);
           setMessage("Your profile was updated successfully.");
-          setStage("updated profile");
+          setStage(UPDATED);
           syncInputsAndUserProfile(userData);
           setButtonText(UPDATED_TEXT);
         } else {
@@ -121,9 +148,9 @@ export default function App() {
         }
       })
       .catch((err) => {
-        console.error(err);
-        setMessage(
-          "Something went wrong while trying to update your user. Reload the page and try again."
+        handleRequestError(
+          err,
+          "There was an error while trying to update your user. Reload the page and try again."
         );
       });
   };
@@ -134,22 +161,24 @@ export default function App() {
       .register(inputs)
       .then(({ data }) => {
         setTimeout(setLoading(false), 800);
-        const { error } = data;
+        const { error, responseMessage } = data;
         if (!error) {
           const { user: userData } = data;
-          setStage("authenticated");
+          setStage(AUTHENTICATED);
           syncInputsAndUserProfile(userData);
           setMessage(
             `You are now registered as ${userData.email}, and are subscribed to the service. You may turn off the service below.`
           );
           setButtonText("Update");
         } else {
-          setMessage(data.message);
+          handleRequestError(error, responseMessage);
         }
       })
       .catch((err) => {
-        setLoading(false);
-        console.error(err, "There was an error");
+        handleRequestError(
+          err,
+          "There was an error while trying to register your user. Reload the page and try again."
+        );
       });
   };
 
@@ -158,7 +187,7 @@ export default function App() {
   If it differs, we consider the profile to have changed. This will enable the update button. 
   */
   useEffect(() => {
-    if (stage === "authenticated" || stage === "updated profile") {
+    if (stage === AUTHENTICATED || stage === UPDATED) {
       if (!isEqual(inputs, user)) {
         setButtonText("Update");
         setProfileChanged(true);
