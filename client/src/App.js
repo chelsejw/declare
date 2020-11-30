@@ -1,25 +1,13 @@
 import React, { useEffect, useState } from "react";
-import {
-  Paper,
-  Grid,
-  TextField,
-  CssBaseline,
-  Button,
-  Box,
-} from "@material-ui/core";
-import Form from './Form'
+import {Paper, Grid,CssBaseline, Box} from "@material-ui/core";
 import { isEqual } from "lodash";
-import AuthHeader from './components/AuthHeader'
+import AuthHeader from "./components/AuthHeader";
+import Form from "./Form";
 import FormStyle from "./styles/FormStyle";
 import Copyright from "./components/Copyright";
-import axios from "axios";
-import Register from "./components/Register";
-import Update from "./components/Update";
-import Login from "./components/Login";
 import Welcome from "./components/Welcome";
-import ScaleLoader from "react-spinners/ScaleLoader";
-const updatedText = "Successfully updated your profile!";
-
+import axios from "axios";
+const UPDATED_TEXT = "Successfully updated your profile!";
 const useStyles = FormStyle;
 
 export default function App() {
@@ -41,6 +29,11 @@ export default function App() {
   const [user, setUser] = useState({ email: "" });
   const [loading, setLoading] = useState(false);
   const [profileChanged, setProfileChanged] = useState(false);
+
+  const syncInputsAndUserProfile = (updatedData) => {
+    setInputs((prev) => ({ ...prev, updatedData}));
+    setUser((prev) => ({ ...prev, updatedData }));
+  }
 
   const handleInputChange = (e) => {
     if (e.target.name === "active") {
@@ -93,10 +86,7 @@ export default function App() {
           setMessage(responseMessage);
         } else {
           setStage("authenticated");
-          console.log(`My user data is...`);
-          console.log(userData);
-          setUser({ ...inputs, ...userData });
-          setInputs({ ...inputs, ...userData });
+          syncInputsAndUserProfile(userData)
           setMessage(
             `You are authenticated as ${userData.email}. You may update your details below.`
           );
@@ -129,9 +119,8 @@ export default function App() {
           setLoading(false);
           setMessage("Your profile was updated successfully.");
           setStage("updated profile");
-          setUser({ ...inputs, ...userData });
-          setInputs({ ...inputs, ...userData });
-          setButtonText(updatedText);
+          syncInputsAndUserProfile(userData);
+          setButtonText(UPDATED_TEXT);
         } else {
           setLoading(false);
           setMessage(
@@ -153,13 +142,11 @@ export default function App() {
       .post("http://localhost:4000/register", inputs)
       .then(({ data }) => {
         setTimeout(setLoading(false), 800);
-        const err = data.error;
-        console.log(data);
-        if (!err) {
+        const {error} = data;
+        if (!error) {
           const { user: userData } = data;
           setStage("authenticated");
-          setUser({ ...inputs, ...userData });
-          setInputs({ ...inputs, ...userData });
+          syncInputsAndUserProfile(userData);
           setMessage(
             `You are now registered as ${userData.email}, and are subscribed to the service. You may turn off the service below.`
           );
@@ -174,12 +161,12 @@ export default function App() {
       });
   };
 
-  // useEffect(() => {
-  //   console.log(`Use effect user log`, user);
-  // }, [user]);
-
+  /*
+  Everytime input is changed, and the user is either authenticated or has updated their profile, check if the inputs differ from their user data.
+  If it differs, we consider the profile to have changed. This will enable the update button. 
+  */
   useEffect(() => {
-    if (stage==="authenticated" || stage==="updated profile") {
+    if (stage === "authenticated" || stage === "updated profile") {
       if (!isEqual(inputs, user)) {
         setButtonText("Update");
         setProfileChanged(true);
@@ -187,7 +174,6 @@ export default function App() {
       }
       setProfileChanged(false);
     }
-    
   }, [inputs]);
 
   return (
@@ -197,12 +183,24 @@ export default function App() {
       <Grid item xs={12} sm={9} md={7} component={Paper} elevation={6} square>
         <div className={classes.paper}>
           <AuthHeader classes={classes} stage={stage} message={message} />
-
-          <Form classes={classes} stage={stage} message={message} checkIfUserExists={checkIfUserExists} registerUser={registerUser} loginUser={loginUser} loading={loading} profileChanged={profileChanged} updateUser={updateUser} handleInputChange={handleInputChange} inputs={inputs} user={user} buttonText={buttonText}/>
+          <Form
+            classes={classes}
+            stage={stage}
+            message={message}
+            checkIfUserExists={checkIfUserExists}
+            registerUser={registerUser}
+            loginUser={loginUser}
+            loading={loading}
+            profileChanged={profileChanged}
+            updateUser={updateUser}
+            handleInputChange={handleInputChange}
+            inputs={inputs}
+            user={user}
+            buttonText={buttonText}
+          />
 
           <Box mt={5}>
             <Welcome />
-
             <Copyright />
           </Box>
         </div>
