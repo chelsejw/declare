@@ -38,18 +38,6 @@ export default function App() {
     setUser((prev) => ({ ...prev, ...updatedData }));
   };
 
-  // useEffect(()=> {
-  //   console.log(`Inputs updated`)
-  //   console.log(inputs)
-  // }, [inputs])
-
-  // const handleResponses = (res) => {
-  //   if (stage===CHECK_EMAIL) {
-
-  //   }
-
-  // }
-
   const handleRequestError = (err, errorMessage) => {
     console.error(err);
     setMessage(errorMessage);
@@ -102,9 +90,6 @@ export default function App() {
       .then(({ data }) => {
         setLoading(false);
         const { error, message: responseMessage, user: userData } = data;
-        console.log(`The data I got back`);
-        console.log(userData);
-        // console.log(userData, `from login`);
         if (error) {
           setMessage(responseMessage);
           return;
@@ -131,8 +116,6 @@ export default function App() {
       .update(inputs)
       .then(({ data }) => {
         const { error, user: userData } = data;
-        console.log(`The data I got back`);
-        console.log(userData);
         setProfileChanged(false);
         if (!error) {
           setLoading(false);
