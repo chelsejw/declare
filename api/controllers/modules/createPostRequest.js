@@ -48,6 +48,7 @@ const createPostRequest = (userType, user) => {
   return axios
   .post(postEndpoint, formData)
     .then(_ => {
+      // Upon succesful submission, update user's last declared field.
       user.last_declared = date;
       user.save()
     })
