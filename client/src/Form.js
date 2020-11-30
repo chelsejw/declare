@@ -13,9 +13,7 @@ export default function Form ({classes, stage, inputs, handleInputChange, update
   return (
     <form className={classes.form} noValidate>
       {
-        <div>
           <TextField
-            helperText="incorrect"
             variant="outlined"
             margin="normal"
             required
@@ -29,7 +27,6 @@ export default function Form ({classes, stage, inputs, handleInputChange, update
             value={inputs.email}
             onChange={(e) => handleInputChange(e)}
           />
-        </div>
       }
 
       {stage === "login" && (
