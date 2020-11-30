@@ -12,16 +12,35 @@ const controllers = {
       return;
     }
 
-    let argon2Hash = await argon2.hash(password);
+    let argon2Hash;
 
-    //
-    const newUser = await User.create({ ...req.body, password: argon2Hash });
-    const { ga_email, full_name, mobile, active } = newUser;
-    res.json({
-      error: false,
-      msg: "User create success.",
-      user: { email, ga_email, full_name, mobile, active },
-    });
+    try {
+      argon2Hash = await argon2.hash(password);
+    } catch (err) {
+      console.error(err);
+
+      res.json({
+        error: true,
+        message: "There was an unexpected system error.",
+      });
+    }
+
+    try {
+      const newUser = await User.create({ ...req.body, password: argon2Hash });
+      const { ga_email, full_name, mobile, active } = newUser;
+      res.json({
+        error: false,
+        message: "User was created successfully.",
+        user: { email, ga_email, full_name, mobile, active },
+      });
+    } catch (err) {
+      console.error(err);
+      res.json({
+        error: true,
+        message: "There was an unexpected error while creating your user.",
+        logs: err,
+      });
+    }
   },
 
   login: async (req, res) => {
@@ -43,7 +62,7 @@ const controllers = {
             ga_email: user.ga_email,
             active: user.active,
             mobile: user.mobile,
-            last_declared: user.last_declared
+            last_declared: user.last_declared,
           },
         });
       } else {
