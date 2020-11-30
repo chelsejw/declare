@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { Paper, Grid, CssBaseline, Box } from "@material-ui/core";
-import { isEqual } from "lodash";
+import { isEqual, omit } from "lodash";
 import AuthHeader from "./components/AuthHeader";
 import Form from "./components/form/Form";
 import FormStyle from "./styles/FormStyle";
 import Copyright from "./components/Copyright";
 import Welcome from "./components/Welcome";
 import requests from "./helpers/api";
-const UPDATED_TEXT = "Successfully updated your profile!";
-const CHECK_EMAIL = "check email";
-const AUTHENTICATED = "authenticated";
-const UPDATED = "updated profile";
+import {
+  CHECK_EMAIL,
+  UPDATED,
+  AUTHENTICATED,
+  LOGIN,
+  UPDATED_TEXT,
+  REGISTER,
+} from "./constants";
+
 const useStyles = FormStyle;
 
 export default function App() {
@@ -62,11 +67,11 @@ export default function App() {
         setLoading(false);
         const { exists } = data;
         if (exists) {
-          setStage("login");
+          setStage(LOGIN);
           setButtonText("Check Password");
           setMessage("This email is registered. Enter your password");
         } else {
-          setStage("register");
+          setStage(REGISTER);
           setButtonText("Register");
           setMessage(
             "Email does not exist in our database. Register for the service"
@@ -94,13 +99,12 @@ export default function App() {
           setMessage(responseMessage);
           return;
         }
-        setStage(AUTHENTICATED);
         syncInputsAndUserProfile(userData);
+        setStage(AUTHENTICATED);
         setMessage(
           `You are authenticated as ${userData.email}. You may update your details below.`
         );
         setButtonText("Update");
-
       })
       .catch((err) => {
         handleRequestError(
@@ -116,13 +120,13 @@ export default function App() {
       .update(inputs)
       .then(({ data }) => {
         const { error, user: userData } = data;
-        setProfileChanged(false);
         if (!error) {
           setLoading(false);
           setMessage("Your profile was updated successfully.");
-          setStage(UPDATED);
           syncInputsAndUserProfile(userData);
+          setStage(UPDATED);
           setButtonText(UPDATED_TEXT);
+          setProfileChanged(false);
         } else {
           setLoading(false);
           setMessage(
@@ -152,7 +156,8 @@ export default function App() {
           setMessage(
             `You are now registered as ${userData.email}, and are subscribed to the service. You may turn off the service below.`
           );
-          setButtonText("Update");
+          setButtonText("Registration successful!");
+          setProfileChanged(false)
         } else {
           handleRequestError(error, responseMessage);
         }
@@ -171,14 +176,23 @@ export default function App() {
   */
   useEffect(() => {
     if (stage === AUTHENTICATED || stage === UPDATED) {
-      if (!isEqual(inputs, user)) {
+      let inputsWithoutPassword = omit(inputs, "password");
+      // console.log(inputsWithoutPassword);
+      // console.log(user);
+      if (!isEqual(inputsWithoutPassword, user)) {
+        // console.log(`There are changes`);
         setButtonText("Update");
         setProfileChanged(true);
         return;
       }
       setProfileChanged(false);
+      // console.log(`No changes`);
+      // console.log(
+      //   `Is bar disabled?`,
+      //   (stage === UPDATED || stage === AUTHENTICATED) && !profileChanged
+      // );
     }
-  }, [inputs]);
+  }, [inputs, user, stage]);
 
   return (
     <Grid container component="main" className={classes.root}>
@@ -201,6 +215,7 @@ export default function App() {
             inputs={inputs}
             user={user}
             buttonText={buttonText}
+            constants={{ AUTHENTICATED, CHECK_EMAIL, UPDATED_TEXT, UPDATED }}
           />
 
           <Box mt={5}>
