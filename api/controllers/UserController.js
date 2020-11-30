@@ -1,11 +1,35 @@
 const User = require("../models/user");
 const argon2 = require("argon2");
+
+const errorHandler = (res, err, message) => {
+  let response = {};
+  console.error(err);
+  response.message = message;
+  res.status(500);
+  response.error = true;
+  res.json(response);
+};
+
+const setResponse = (res, err, message, userData, existsField) => {
+  let response = {};
+  response.error = err;
+  response.message = message;
+  if (userData) {
+    response.user = userData;
+  }
+  if (existsField) {
+    // This is only for checkIfUserExists route
+    response.exists = existsField;
+  }
+  res.json(response);
+};
+
 const controllers = {
   register: async (req, res) => {
     // Check if user exists.
     const { email, password } = req.body;
     if (await User.findOne({ email })) {
-      res.json({ error: true, message: "Email is already in use." });
+      setResponse(res, true, "Email is already in use.");
       return;
     }
 
@@ -14,29 +38,16 @@ const controllers = {
     try {
       argon2Hash = await argon2.hash(password);
     } catch (err) {
-      console.error(err);
-
-      res.json({
-        error: true,
-        message: "There was an unexpected system error.",
-      });
+      errorHandler(res, err, "There was an unexpected system error.");
     }
 
     try {
       const newUser = await User.create({ ...req.body, password: argon2Hash });
-      const { ga_email, full_name, mobile, active } = newUser;
-      res.json({
-        error: false,
-        message: "User was created successfully.",
-        user: { email, ga_email, full_name, mobile, active },
-      });
+      let { ga_email, full_name, active, mobile, last_declared } = newUser;
+      let userDataToSend = { ga_email, full_name, active, mobile, email: newUser.email, last_declared };
+      setResponse(res, false, "User was created successfully.", userDataToSend);
     } catch (err) {
-      console.error(err);
-      res.json({
-        error: true,
-        message: "There was an unexpected error while creating your user.",
-        logs: err,
-      });
+      errorHandler(res, err, "There was an unexpected system error.");
     }
   },
 
@@ -44,70 +55,55 @@ const controllers = {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
-      res.json({ error: true, message: "No user found." });
-      return;
+      setResponse(res, true, "No user with that email found.");
     }
     try {
       const passwordVerified = await argon2.verify(user.password, password);
       if (passwordVerified) {
-        res.json({
-          error: false,
-          message: "Login successful.",
-          user: {
-            email: user.email,
-            full_name: user.full_name,
-            ga_email: user.ga_email,
-            active: user.active,
-            mobile: user.mobile,
-            last_declared: user.last_declared,
-          },
-        });
+        let { ga_email, full_name, active, mobile, last_declared } = user;
+        setResponse(res, false, "Login successful.", { email: user.email, ga_email, full_name, active, mobile, last_declared });
       } else {
-        res.json({ error: true, message: "Password is wrong." });
+        setResponse(res, true, "Password is incorrect.");
       }
     } catch (err) {
-      console.log(err);
-      res.statusCode(500);
-      res.json({ error: true, message: "Something went wrong." });
+      errorHandler(res, err, "There was an unexpected system error.");
     }
   },
 
-  validateRegisteredUser: async (req, res) => {
+  checkIfUserExists: async (req, res) => {
     const { email } = req.body;
-    if (await User.findOne({ email })) {
-      res.json({ exists: true });
-      return;
-    } else {
-      res.json({ exists: false });
+    try {
+      if (await User.findOne({ email })) {
+        setResponse(res, false, "This user exists.", null, true);
+        return;
+      } else {
+        setResponse(res, false, "The user does not exist.", null, false);
+      }
+    } catch (err) {
+      errorHandler(res, err, "There was an unexpected system error.");
     }
   },
 
   updateUser: async (req, res) => {
-    const { email, ga_email, full_name, active, mobile } = req.body;
+    let { email, ga_email, full_name, active, mobile } = req.body;
     User.findOneAndUpdate(
       { email },
       { ga_email, full_name, active, mobile },
       { new: true } // returns the updated document
     )
       .then((updatedUser) => {
-        res.json({
-          error: false,
-          message: "Update was successful.",
-          user: {
-            ga_email: updatedUser.ga_email,
-            full_name: updatedUser.full_name,
-            active: updatedUser.active,
-            mobile: updatedUser.mobile,
-            last_declared: updatedUser.last_declared,
-          },
-        });
+        let userDataToSend = {
+          email: updatedUser.email,
+          ga_email: updatedUser.ga_email,
+          full_name: updatedUser.full_name,
+          active: updatedUser.active,
+          mobile: updatedUser.mobile,
+          last_declared: updatedUser.last_declared
+        }
+        setResponse(res, false, "Update was successful.", userDataToSend);
       })
       .catch((err) => {
-        console.log(err);
-        res.json({
-          error: true,
-          message: "Something went wrong while trying to update your user.",
-        });
+        errorHandler(res, err, "There was an unexpected system error.");
       });
   },
 };
