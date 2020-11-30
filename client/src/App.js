@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
-import {Paper, Grid,CssBaseline, Box} from "@material-ui/core";
+import { Paper, Grid, CssBaseline, Box } from "@material-ui/core";
 import { isEqual } from "lodash";
 import AuthHeader from "./components/AuthHeader";
 import Form from "./Form";
 import FormStyle from "./styles/FormStyle";
 import Copyright from "./components/Copyright";
 import Welcome from "./components/Welcome";
-import axios from "axios";
+import requests from "./helpers/api";
+
 const UPDATED_TEXT = "Successfully updated your profile!";
 const useStyles = FormStyle;
 
@@ -31,9 +32,9 @@ export default function App() {
   const [profileChanged, setProfileChanged] = useState(false);
 
   const syncInputsAndUserProfile = (updatedData) => {
-    setInputs((prev) => ({ ...prev, updatedData}));
+    setInputs((prev) => ({ ...prev, updatedData }));
     setUser((prev) => ({ ...prev, updatedData }));
-  }
+  };
 
   const handleInputChange = (e) => {
     if (e.target.name === "active") {
@@ -46,8 +47,9 @@ export default function App() {
 
   const checkIfUserExists = () => {
     setLoading(true);
-    axios
-      .post("http://localhost:4000/exists", { email: inputs.email })
+    const { email } = inputs;
+    requests
+      .checkEmail(email)
       .then(({ data }) => {
         setLoading(false);
         const { exists } = data;
@@ -72,12 +74,10 @@ export default function App() {
 
   const loginUser = () => {
     setLoading(true);
+    const { email, password } = inputs;
 
-    axios
-      .post("http://localhost:4000/login", {
-        email: inputs.email,
-        password: inputs.password,
-      })
+    requests
+      .login(email, password)
       .then(({ data }) => {
         setLoading(false);
         const { error, message: responseMessage, user: userData } = data;
@@ -86,7 +86,7 @@ export default function App() {
           setMessage(responseMessage);
         } else {
           setStage("authenticated");
-          syncInputsAndUserProfile(userData)
+          syncInputsAndUserProfile(userData);
           setMessage(
             `You are authenticated as ${userData.email}. You may update your details below.`
           );
@@ -101,20 +101,12 @@ export default function App() {
   };
 
   const updateUser = () => {
-    const { email, full_name, ga_email, active, mobile } = inputs;
     setLoading(true);
-    axios
-      .patch("http://localhost:4000/update", {
-        email,
-        full_name,
-        ga_email,
-        active,
-        mobile,
-      })
+    requests
+      .update(inputs)
       .then(({ data }) => {
         const { error, user: userData } = data;
         setProfileChanged(false);
-        // console.log(res.data);
         if (!error) {
           setLoading(false);
           setMessage("Your profile was updated successfully.");
@@ -138,11 +130,11 @@ export default function App() {
 
   const registerUser = () => {
     setLoading(true);
-    axios
-      .post("http://localhost:4000/register", inputs)
+    requests
+      .register(inputs)
       .then(({ data }) => {
         setTimeout(setLoading(false), 800);
-        const {error} = data;
+        const { error } = data;
         if (!error) {
           const { user: userData } = data;
           setStage("authenticated");
