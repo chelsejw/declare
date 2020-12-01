@@ -9,7 +9,7 @@ export default function LastDeclared({ inputs, handleInputChange, lastDeclared }
         <Grid justify="space-between" container alignItems="center">
           <Grid item xs={11}>
             <Typography variant="subtitle1" align="right">
-              Automatically send my all-clear declaration form every Monday.
+            Automatically send my all-clear declaration form.
             </Typography>
           </Grid>
           <Grid item xs={1}>
