@@ -2,7 +2,7 @@ const qs = require("qs");
 const axios = require("axios");
 
 const createPostRequest = (userType, user) => {
-  const {email, ga_email, mobile, full_name } = user
+  const { email, ga_email, mobile, full_name } = user;
   const date = new Date();
   const currentDay = date.getDate();
   const currentMonth = date.getMonth() + 1;
@@ -27,32 +27,46 @@ const createPostRequest = (userType, user) => {
     ["entry.330888046"]: "Yes, I understand.",
   };
 
+  // const oldTestForm = {
+  //   ["entry.218682909"]: full_name,
+  //   ["entry.376316146_year"]: currentYear,
+  //   ["entry.376316146_month"]: currentMonth,
+  //   ["entry.376316146_day"]: currentDay,
+  //   ["entry.1944830854"]: "Yes",
+  //   ["emailAddress"]: email,
+  // };
+
+  // const oldTestRequestUrl = `https://docs.google.com/forms/u/0/d/e/1FAIpQLSdG6OmYlhYEqLjFH33nV4t14-C-mi01xQrvAjEDNWHysAeJRA/https://docs.google.com/forms/u/0/d/e/1FAIpQLSdG6OmYlhYEqLjFH33nV4t14-C-mi01xQrvAjEDNWHysAeJRA/formResponseformResponse`
+
   const testForm = {
-    ["entry.218682909"]: full_name,
-    ["entry.376316146_year"]: currentYear,
-    ["entry.376316146_month"]: currentMonth,
-    ["entry.376316146_day"]: currentDay,
-    ["entry.1944830854"]: "Yes",
-    ["emailAddress"]: email,
+    ["entry.920081963"]: full_name,
+    ["entry.729846715"]: mobile,
+    ["entry.819171092"]: email,
+    ["entry.1172513648"]: ga_email,
+    ["entry.914351031_year"]: currentYear,
+    ["entry.914351031_month"]: currentMonth,
+    ["entry.914351031_day"]: currentDay,
   };
+
+
 
   let formData, postEndpoint;
 
   if (userType === "test") {
     formData = qs.stringify(testForm);
-    postEndpoint = `https://docs.google.com/forms/u/0/d/e/1FAIpQLSdG6OmYlhYEqLjFH33nV4t14-C-mi01xQrvAjEDNWHysAeJRA/formResponse`;
+    postEndpoint = `https://docs.google.com/forms/u/0/d/e/1FAIpQLSeFUYvoZykDfxUPPsmEWgfJWa9WLXgcZ356xFs5ZoFwGsj7ng/formResponse`;
   } else {
     formData = qs.stringify(studentForm);
     postEndpoint = `https://docs.google.com/forms/u/2/d/e/1FAIpQLSfviLd5-9633aKQBAeVIS58rr0WCEO8irhjLYFHYgGBsN49iQ/formResponse`;
   }
   return axios
-  .post(postEndpoint, formData)
-    .then(_ => {
+    .post(postEndpoint, formData)
+    .then((_) => {
       // Upon succesful submission, update user's last declared field.
       user.last_declared = date;
-      user.save()
+      user.save();
     })
     .catch((err) => console.log(err));
-}
+};
 
 module.exports = createPostRequest;
