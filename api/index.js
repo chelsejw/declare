@@ -15,7 +15,11 @@ const cors = require("cors");
 /* ===========================
   Express middleware configuration
   ===========================*/
-app.use(cors());
+const corsConfigs = {
+  origin: "https://ga-declaration.herokuapp.com",
+  methods: ["GET", "PUT", "POST"],
+};
+app.use(cors(corsConfigs));
 app.use(express.json());
 
 /* ===========================
