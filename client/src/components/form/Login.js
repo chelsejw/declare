@@ -1,9 +1,14 @@
 import React from "react";
 import { TextField } from "@material-ui/core";
 
-export default function Login({ inputs, handleInputChange }) {
+export default function Login({ errors, inputs, handleInputChange, renderErrors }) {
+  const {
+    password: passwordErrors,
+  } = errors;
   return (
     <TextField
+    error={passwordErrors.length > 0}
+    helperText={passwordErrors.length > 0 && renderErrors(passwordErrors)}
       variant="outlined"
       margin="normal"
       required

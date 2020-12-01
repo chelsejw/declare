@@ -8,6 +8,8 @@ import FormStyle from "./styles/FormStyle";
 import Copyright from "./components/Copyright";
 import Welcome from "./components/Welcome";
 import requests from "./helpers/api";
+import formValidator from "./helpers/validator";
+
 import {
   CHECK_EMAIL,
   UPDATED,
@@ -16,7 +18,6 @@ import {
   UPDATED_TEXT,
   REGISTER,
 } from "./constants";
-
 const useStyles = FormStyle;
 
 export default function App() {
@@ -34,6 +35,15 @@ export default function App() {
   const [message, setMessage] = useState(
     "Enter your email to see if it's in the database."
   );
+
+  const [errors, setErrors] = useState({
+    ga_email: [],
+    email: [],
+    full_name: [],
+    mobile: [],
+    password: [],
+  });
+
   const [buttonText, setButtonText] = useState(CHECK_EMAIL);
   const [user, setUser] = useState({ email: "" });
   const [loading, setLoading] = useState(false);
@@ -53,7 +63,7 @@ export default function App() {
   const responseHandler = (data) => {
     setLoading(false);
     const { error, responseMessage } = data;
-    
+
     if (error) {
       setMessage(responseMessage);
       return;
@@ -97,7 +107,7 @@ export default function App() {
       );
       setButtonText("Registration successful!");
       setProfileChanged(false);
-      return
+      return;
     }
 
     if (stage === AUTHENTICATED || stage === UPDATED) {
@@ -106,7 +116,7 @@ export default function App() {
       setStage(UPDATED);
       setButtonText(UPDATED_TEXT);
       setProfileChanged(false);
-      return
+      return;
     }
   };
 
@@ -120,6 +130,9 @@ export default function App() {
   };
 
   const checkIfUserExists = () => {
+    const form = formValidator("email", inputs);
+    setErrors((prev) => ({ ...prev, ...form.errors }));
+    if (!form.isValid) return;
     setLoading(true);
     const { email } = inputs;
     requests
@@ -136,6 +149,9 @@ export default function App() {
   };
 
   const loginUser = () => {
+    const form = formValidator("email, password", inputs);
+    setErrors((prev) => ({ ...prev, ...form.errors }));
+    if (!form.isValid) return;
     setLoading(true);
     const { email, password } = inputs;
     requests
@@ -152,6 +168,9 @@ export default function App() {
   };
 
   const updateUser = () => {
+    const form = formValidator("ga_email, mobile, full_name", inputs);
+    setErrors((prev) => ({ ...prev, ...form.errors }));
+    if (!form.isValid) return;
     setLoading(true);
     requests
       .update(inputs)
@@ -167,6 +186,9 @@ export default function App() {
   };
 
   const registerUser = () => {
+    const form = formValidator("ga_email, password, mobile, full_name", inputs);
+    setErrors((prev) => ({ ...prev, ...form.errors }));
+    if (!form.isValid) return;
     setLoading(true);
     requests
       .register(inputs)
@@ -205,6 +227,10 @@ export default function App() {
     }
   }, [inputs, user, stage]);
 
+  useEffect(() => {
+    console.log(errors);
+  }, [errors]);
+
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
@@ -216,6 +242,7 @@ export default function App() {
             classes={classes}
             stage={stage}
             message={message}
+            errors={errors}
             checkIfUserExists={checkIfUserExists}
             registerUser={registerUser}
             loginUser={loginUser}

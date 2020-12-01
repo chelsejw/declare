@@ -10,36 +10,51 @@ import Login from "./Login";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import {CHECK_EMAIL, UPDATED, AUTHENTICATED, LOGIN, REGISTER} from '../../constants'
 
-export default function Form ({classes, stage, inputs, handleInputChange, updateUser, loading, profileChanged, loginUser, user, checkIfUserExists, registerUser, buttonText}) {
+export default function Form ({errors, classes, stage, inputs, handleInputChange, updateUser, loading, profileChanged, loginUser, user, checkIfUserExists, registerUser, buttonText}) {
+
+  const {email: emailErrors} = errors;
+  
+  const renderErrors = (arrayOfMessages) => {
+    return arrayOfMessages.map( (msg, index) => {
+      return <span key={index}>{"*"} {msg} {" "}</span>
+    })
+  }
+  
   return (
     <form className={classes.form} noValidate>
       {
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            disabled={stage !== CHECK_EMAIL ? true : false}
-            autoComplete="email"
-            autoFocus
-            value={inputs.email}
-            onChange={(e) => handleInputChange(e)}
-          />
+        <TextField
+          error={emailErrors.length > 0}
+          helperText={emailErrors.length > 0 && renderErrors(emailErrors)}
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          id="email"
+          label="Email Address"
+          name="email"
+          disabled={stage !== CHECK_EMAIL ? true : false}
+          autoComplete="email"
+          autoFocus
+          value={inputs.email}
+          onChange={(e) => handleInputChange(e)}
+        />
       }
 
-      {stage === LOGIN && (
+      {(stage === LOGIN || stage === REGISTER) && (
         <Login
           inputs={inputs}
+          errors={errors}
           handleInputChange={(e) => handleInputChange(e)}
+          renderErrors={renderErrors}
         />
       )}
 
-      {stage === REGISTER && (
+      {(stage === REGISTER || stage === AUTHENTICATED || stage === UPDATED) && (
         <Register
+        errors = {errors}
           inputs={inputs}
+          renderErrors={renderErrors}
           handleInputChange={(e) => handleInputChange(e)}
         />
       )}
@@ -60,8 +75,7 @@ export default function Form ({classes, stage, inputs, handleInputChange, update
         className={classes.submit}
         disabled={
           loading ||
-          ((stage === UPDATED || stage === AUTHENTICATED) &&
-            !profileChanged)
+          ((stage === UPDATED || stage === AUTHENTICATED) && !profileChanged)
         } // If loading is true, no other requests should be sent.
         onClick={(e) => {
           e.preventDefault();

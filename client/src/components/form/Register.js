@@ -1,12 +1,19 @@
 import React from "react";
 import { TextField } from "@material-ui/core";
 
-export default function Register({ inputs, handleInputChange }) {
+export default function Register({ inputs, handleInputChange, errors, renderErrors }) {
+  const {
+    ga_email: GAEmailErrors,
+    mobile: mobileErrors,
+    full_name: fullNameErrors,
+  } = errors;
   return (
     <div>
       <TextField
         variant="outlined"
         margin="normal"
+        error={GAEmailErrors.length > 0}
+        helperText={GAEmailErrors.length > 0 && renderErrors(GAEmailErrors)}
         required
         fullWidth
         id="ga_email"
@@ -17,8 +24,10 @@ export default function Register({ inputs, handleInputChange }) {
         value={inputs.ga_email}
         onChange={(e) => handleInputChange(e)}
       />
-      <TextField
+      {/* <TextField
         variant="outlined"
+        errors={passwordErrors.length > 0}
+        helperText={passwordErrors.length > 0 && renderErrors(passwordErrors)}
         margin="normal"
         required
         fullWidth
@@ -30,7 +39,7 @@ export default function Register({ inputs, handleInputChange }) {
         type="password"
         value={inputs.password}
         onChange={(e) => handleInputChange(e)}
-      />
+      /> */}
       {/* <TextField
               variant="outlined"
               margin="normal"
@@ -48,6 +57,8 @@ export default function Register({ inputs, handleInputChange }) {
         variant="outlined"
         margin="normal"
         required
+        error={mobileErrors.length > 0}
+        helperText={mobileErrors.length > 0 && renderErrors(mobileErrors)}
         fullWidth
         id="mobile"
         label="Contact Number"
@@ -60,6 +71,8 @@ export default function Register({ inputs, handleInputChange }) {
       <TextField
         variant="outlined"
         margin="normal"
+        error={fullNameErrors.length > 0}
+        helperText={fullNameErrors.length > 0 && renderErrors(fullNameErrors)}
         required
         fullWidth
         id="full_name"
