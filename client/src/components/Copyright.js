@@ -9,9 +9,9 @@ export default function Copyright() {
         Chelsea E.
       </Link>{" "}
       {new Date().getFullYear()}
-      {". | "} Contribute to the project on {" "}
+      {". | "}
       <Link color="primary" href="https://github.com/chelsejw/declare">
-        Github
+        Github Repo
       </Link>
     </Typography>
   );
