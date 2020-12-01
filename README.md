@@ -28,7 +28,7 @@ To start either app, do `npm start` or `yarn start` from their respective root f
 
 ✅  Setup backend to send forms periodically
 
-❗️  Validation for frontend input
+✅   Validation for frontend input
 
 ❗️  Notify user via email for every declaration submitted? (Users should be able to turn on/off the feature. Or they can enable emails only when the service fails.) 
 
