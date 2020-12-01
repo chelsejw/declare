@@ -1,5 +1,5 @@
 import React from "react";
-import {Typography, Avatar, Grid} from "@material-ui/core";
+import {Typography, Avatar} from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
