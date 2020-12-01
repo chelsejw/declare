@@ -6,7 +6,7 @@ export default function Welcome() {
     <div>
       <Box mb={2}>
         <Typography variant="body1" color="textSecondary" align="center">
-          This app was built to help our students (and TAs) focus on what
+          This app was built to help our students focus on what
           matters the most – not weekly declaration forms. Subscribed users will
           have their all-clear declaration forms sent out every Wednesday at 3pm.
           Users can choose to deactivate the service as they wish. Please
