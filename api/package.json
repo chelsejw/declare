@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "deploy": "cd .. && git subtree push --prefix api heroku-api main || true"
   },
   "dependencies": {
     "argon2": "^0.27.0",
