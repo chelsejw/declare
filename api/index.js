@@ -23,7 +23,7 @@ const whiteList =
 
 const corsConfigs = {
   origin: whiteList,
-  methods: ["GET", "PUT", "POST"],
+  methods: ["GET", "POST", "PATCH"],
 };
 app.use(cors(corsConfigs));
 app.use(express.json());
