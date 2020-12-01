@@ -73,18 +73,11 @@ mongoose
     console.log(`Using ${dbType} connection`);
 
     app.listen(port, () => {
-      console.log(`Declare app listening on port: ${port}`);
-      console.log(
-        `Current scheduled time to send declarations is`,
-        ENV.SCHEDULED_TIME_TO_RUN
-      );
+      console.log(`Declare API is running on port: ${port}`);
+      console.log(`The environment is currently set to ${environment}`);
     });
   })
   .catch((err) => {
     console.error(err);
-    console.log(
-      `Error while trying to connect to ${
-        usingLocalDB ? "local" : "atlas"
-      } connection`
-    );
+    console.log(`Error while trying to connect to ${dbType} connection`);
   });
