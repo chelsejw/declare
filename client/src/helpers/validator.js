@@ -51,7 +51,7 @@ export default function formValidator(inputTypes, inputs) {
       const mobileRegEx = new RegExp(/^[0-9\s]*$/);
       if (!mobileRegEx.test(mobile)) {
         errors.mobile.push(
-          "Mobile number does not look valid. It should not contain any words."
+          "Contact number does not look valid. It should not contain any words."
         );
         isValid = false;
       }
