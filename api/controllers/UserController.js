@@ -113,13 +113,13 @@ const controllers = {
     function dayOfWeekAsString(dayIndex) {
       return (
         [
+          "Sunday",
           "Monday",
           "Tuesday",
           "Wednesday",
           "Thursday",
           "Friday",
           "Saturday",
-          "Sunday",
         ][dayIndex] || ""
       );
     }
