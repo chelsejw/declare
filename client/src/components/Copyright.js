@@ -7,9 +7,12 @@ export default function Copyright() {
       {"Copyright © "}
       <Link color="textPrimary" href="https://github.com/chelsejw">
         Chelsea E.
+      </Link>{" "}
+      {new Date().getFullYear()}
+      {". | "} Contribute to the project on {" "}
+      <Link color="textPrimary" href="https://github.com/chelsejw/declare">
+        Github
       </Link>
-      {" "} {new Date().getFullYear()}
-      {"."}
     </Typography>
   );
 }

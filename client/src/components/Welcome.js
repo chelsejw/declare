@@ -41,27 +41,21 @@ export default function Welcome() {
             <CircularProgress color="secondary" hidden={loadingScheduledTime} />
           ) : (
             <Typography variant="body1" display="inline" color="secondary">
-              {scheduledTime}.
+              {scheduledTime}
             </Typography>
           )}
         </Typography>
       </Box>
       <Box mb={2}>
-        <Typography
-          variant="body2"
-          color="textSecondary"
-          align="center"
-        >
-        If you are facing issues with the app, please reach out to me on Slack (Chelsea E.).
+        <Typography variant="body2" color="textSecondary" align="center">
+          Quick FAQ: Things taking a while to load? The API might be restarting
+          after being idle. Forgot your password? The app has no feature
+          to reset your password at the moment LOL.
         </Typography>
       </Box>
       <Box mb={2}>
         <Typography variant="body2" color="textSecondary" align="center">
-          You can contribute to the project on{" "}
-          <Link color="textPrimary" href="https://github.com/chelsejw/declare">
-            Github
-          </Link>
-          .
+          If there are any unaddressed issues or errors, Slack me the details (@Chelsea E.)
         </Typography>
       </Box>
     </div>
