@@ -9,7 +9,7 @@ const cron = require("node-cron");
 const JobController = require("./controllers/JobController");
 const express = require("express");
 const app = express();
-const port = 4000;
+const port = process.env.PORT || 4000;
 
 const cors = require("cors");
 /* ===========================
@@ -21,7 +21,8 @@ app.use(express.json());
 /* ===========================
   API routes
   ===========================*/
-app.get("/test", JobController.sendGoogleFormForActiveUsers);
+// app.get("/test", JobController.sendGoogleFormForActiveUsers);
+app.get("/scheduled", UserController.getScheduledTime);
 app.post("/exists", UserController.checkIfUserExists);
 app.post("/register", UserController.register);
 app.patch("/update", UserController.updateUser);
@@ -61,7 +62,7 @@ mongoose
     console.log("DB connection successful");
     console.log(`Using ${dbType} connection`);
 
-    app.listen(process.env.PORT || port, () => {
+    app.listen(port, () => {
       console.log(`Declare app listening on port: ${port}`);
       console.log(
         `Current scheduled time to send declarations is`,

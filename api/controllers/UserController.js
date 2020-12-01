@@ -1,3 +1,4 @@
+require("dotenv").config();
 const User = require("../models/user");
 const argon2 = require("argon2");
 
@@ -106,6 +107,29 @@ const controllers = {
         errorHandler(res, err, "There was an unexpected system error.");
       });
   },
+
+  getScheduledTime: (req, res) => {
+    let cronTime = process.env.SCHEDULED_TIME_TO_RUN.split(" ");
+    function dayOfWeekAsString(dayIndex) {
+      return (
+        [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday",
+        ][dayIndex] || ""
+      );
+    }
+    let hour = cronTime[1]; // hour is the second number in the cron string
+    if (hour.toString().length < 2) {
+      hour = "0" + hour;
+    }
+    const day = dayOfWeekAsString(cronTime[4]); // day of the week is the fifth number in the cron string
+    res.send(`${day}, ${hour}:00 hrs`);
+  }
 };
 
 module.exports = controllers;
