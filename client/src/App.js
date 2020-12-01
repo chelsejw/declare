@@ -63,7 +63,6 @@ export default function App() {
   const responseHandler = (data) => {
     setLoading(false);
     const { error, message: responseMessage } = data;
-    console.log(data)
 
     if (error) {
       setMessage(responseMessage);
