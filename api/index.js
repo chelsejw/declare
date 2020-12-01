@@ -9,14 +9,20 @@ const cron = require("node-cron");
 const JobController = require("./controllers/JobController");
 const express = require("express");
 const app = express();
-const port = process.env.PORT || 4000;
+const port = ENV.PORT || 4000;
+const environment = ENV.NODE_ENV;
 
 const cors = require("cors");
 /* ===========================
   Express middleware configuration
   ===========================*/
+const whiteList =
+  environment === "development"
+    ? ["https://ga-declaration.herokuapp.com", "http://localhost:3000"]
+    : "https://ga-declaration.herokuapp.com";
+
 const corsConfigs = {
-  origin: "https://ga-declaration.herokuapp.com",
+  origin: whiteList,
   methods: ["GET", "PUT", "POST"],
 };
 app.use(cors(corsConfigs));
