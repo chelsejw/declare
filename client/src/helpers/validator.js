@@ -48,15 +48,15 @@ export default function formValidator(inputTypes, inputs) {
     if (type === "mobile") {
       const { mobile } = inputs;
       errors.mobile = [];
-      const mobileRegEx = new RegExp(/^[0-9\s]*$/);
+      const mobileRegEx = new RegExp(/^[0-9\s+-]/); // matches digits, whitespace, + and -
       if (!mobileRegEx.test(mobile)) {
         errors.mobile.push(
-          "Contact number does not look valid. It should not contain any words."
+          "Number does not look valid. It should only contain numbers, whitespace, (+)s or (-)s."
         );
         isValid = false;
       }
       if (mobile.length < 8) {
-        errors.mobile.push(`Contact number should be at least 8 digits long.`);
+        errors.mobile.push(`Number should be at least 8 digits long.`);
         isValid = false;
       }
     }
