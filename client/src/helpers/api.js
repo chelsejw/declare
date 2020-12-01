@@ -32,6 +32,10 @@ const requests = {
       mobile,
     });
   },
+
+  getScheduledTime: () => {
+    return axios.get(`${API_URL}/scheduled`)
+  }
 };
 
 

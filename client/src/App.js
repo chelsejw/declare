@@ -210,26 +210,19 @@ export default function App() {
   useEffect(() => {
     if (stage === AUTHENTICATED || stage === UPDATED) {
       let inputsWithoutPassword = omit(inputs, "password");
-      // console.log(inputsWithoutPassword);
-      // console.log(user);
       if (!isEqual(inputsWithoutPassword, user)) {
-        // console.log(`There are changes`);
         setButtonText("Update");
         setProfileChanged(true);
         return;
       }
       setProfileChanged(false);
-      // console.log(`No changes`);
-      // console.log(
-      //   `Is bar disabled?`,
-      //   (stage === UPDATED || stage === AUTHENTICATED) && !profileChanged
-      // );
+
     }
   }, [inputs, user, stage]);
-
-  useEffect(() => {
-    console.log(errors);
-  }, [errors]);
+  
+  // useEffect(() => {
+  //   console.log(errors);
+  // }, [errors]);
 
   return (
     <Grid container component="main" className={classes.root}>
