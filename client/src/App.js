@@ -33,7 +33,7 @@ export default function App() {
 
   const [stage, setStage] = useState(CHECK_EMAIL);
   const [message, setMessage] = useState(
-    "Enter your email to see if it's in the database."
+    "If you are registered, you will be prompted to login. If not, you will be prompted to register."
   );
 
   const [errors, setErrors] = useState({
@@ -219,7 +219,7 @@ export default function App() {
 
     }
   }, [inputs, user, stage]);
-  
+
   // useEffect(() => {
   //   console.log(errors);
   // }, [errors]);
