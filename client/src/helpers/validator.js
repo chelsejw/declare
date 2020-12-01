@@ -1,6 +1,6 @@
 export default function formValidator(inputTypes, inputs) {
   let types = inputTypes.split(", ");
-  console.log(`Validating ${types}`);
+  // console.log(`Validating ${types}`);
   const errors = {};
   let isValid = true;
   types.forEach((type) => {
@@ -40,22 +40,23 @@ export default function formValidator(inputTypes, inputs) {
       const { password } = inputs;
       errors.password = [];
       if (password.length < 6) {
-        errors.password.push(
-          "Password should be at least 6 characters long."
-        );
+        errors.password.push("Password should be at least 6 characters long.");
         isValid = false;
       }
     }
 
     if (type === "mobile") {
       const { mobile } = inputs;
-      console.log(`Mobile is ${mobile}`);
       errors.mobile = [];
       const mobileRegEx = new RegExp(/^[0-9\s]*$/);
       if (!mobileRegEx.test(mobile)) {
         errors.mobile.push(
           "Mobile number does not look valid. It should not contain any words."
         );
+        isValid = false;
+      }
+      if (mobile.length < 8) {
+        errors.mobile.push(`Contact number should be at least 8 digits long.`);
         isValid = false;
       }
     }
