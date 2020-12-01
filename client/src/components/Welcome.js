@@ -35,20 +35,29 @@ export default function Welcome() {
         </Typography>
       </Box>
       <Box mb={2}>
-          <Typography variant="body1" color="textSecondary" align="center">
-            The app is currently set to send out declarations every:{" "}
-            {loadingScheduledTime ? (
-              <CircularProgress color="secondary" hidden={loadingScheduledTime} />
-            ) : (
-              <Typography variant="body1" display="inline" color="secondary">
-                {scheduledTime}.
-              </Typography>
-            )}
-          </Typography>
+        <Typography variant="body1" color="textSecondary" align="center">
+          The app is currently set to send out declarations every:{" "}
+          {loadingScheduledTime ? (
+            <CircularProgress color="secondary" hidden={loadingScheduledTime} />
+          ) : (
+            <Typography variant="body1" display="inline" color="secondary">
+              {scheduledTime}.
+            </Typography>
+          )}
+        </Typography>
+      </Box>
+      <Box mb={2}>
+        <Typography
+          variant="body2"
+          color="textSecondary"
+          align="center"
+        >
+        If you are facing issues with the app, please reach out to me on Slack (Chelsea E.).
+        </Typography>
       </Box>
       <Box mb={2}>
         <Typography variant="body2" color="textSecondary" align="center">
-          You can contribute to this application on{" "}
+          You can contribute to the project on{" "}
           <Link color="textPrimary" href="https://github.com/chelsejw/declare">
             Github
           </Link>
