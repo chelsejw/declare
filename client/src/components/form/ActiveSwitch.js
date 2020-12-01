@@ -2,7 +2,7 @@ import React from "react";
 import { Grid, Typography, Box } from "@material-ui/core";
 import Switch from "@material-ui/core/Switch";
 import moment from 'moment';
-export default function LastDeclared({ inputs, handleInputChange, lastDeclared }) {
+export default function ActiveSwitch({ inputs, handleInputChange, lastDeclared }) {
   return (
     <div>
       <Box my={2}>

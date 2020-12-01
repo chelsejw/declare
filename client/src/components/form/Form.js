@@ -5,7 +5,7 @@ import {
   Button,
 } from "@material-ui/core";
 import Register from "./Register";
-import Update from "./Update";
+import ActiveSwitch from "./ActiveSwitch";
 import Login from "./Login";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import {CHECK_EMAIL, UPDATED, AUTHENTICATED, LOGIN, REGISTER} from '../../constants'
@@ -60,7 +60,7 @@ export default function Form ({errors, classes, stage, inputs, handleInputChange
       )}
 
       {(stage === AUTHENTICATED || stage === UPDATED) && (
-        <Update
+        <ActiveSwitch
           inputs={inputs}
           lastDeclared={user.last_declared}
           handleInputChange={(e) => handleInputChange(e)}
