@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { TextField, MenuItem, Select, InputLabel, FormControl, Typography } from "@material-ui/core";
+import { TextField, MenuItem, Select, InputLabel, FormControl, FormHelperText } from "@material-ui/core";
 import requests from "../../helpers/api";
 
 export default function Register({
@@ -30,6 +30,7 @@ export default function Register({
     ga_email: GAEmailErrors,
     mobile: mobileErrors,
     full_name: fullNameErrors,
+    cohort: cohortErrors
   } = errors;
   return (
     <div>
@@ -105,7 +106,10 @@ export default function Register({
         value={inputs.full_name}
         onChange={(e) => handleInputChange(e)}
       />
-      <FormControl className={classes.formControl}>
+      <FormControl
+        className={classes.formControl}
+        error={cohortErrors.length > 0}
+      >
         <InputLabel shrink id="cohortLabel">
           Cohort Name
         </InputLabel>{" "}
@@ -122,10 +126,11 @@ export default function Register({
           placeholder="Cohort Name"
           onChange={(e) => handleInputChange(e)}
         >
-
-
           {cohortItems}
         </Select>
+        {cohortErrors.length > 0 && (
+          <FormHelperText>{renderErrors(cohortErrors)}</FormHelperText>
+        )}
       </FormControl>
     </div>
   );
