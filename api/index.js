@@ -5,8 +5,6 @@ const localMongo = `mongodb://localhost:27017/${ENV.DB_NAME}`;
 const mongoAtlas = `mongodb+srv://${ENV.DB_USER}:${ENV.DB_PASS}@${ENV.DB_HOST}/${ENV.DB_NAME}`;
 let dbType = ENV.DB_TYPE;
 const UserController = require(`./controllers/UserController`);
-const cron = require("node-cron");
-const JobController = require("./controllers/JobController");
 const express = require("express");
 const app = express();
 const port = ENV.PORT || 4000;
@@ -50,12 +48,12 @@ app.get("*", (_, res) => {
   seconds(optional) | min | hour | day (of the month) | month | day (of the week)
   */
 
-cron.schedule("* * * * *", JobController.testJob);
-// cron.schedule(ENV.SCHEDULED_TIME_TO_RUN, JobController.sendGoogleFormForActiveUsers); // Runs every hour
-cron.schedule(
-  ENV.SCHEDULED_TIME_TO_RUN,
-  JobController.sendGoogleFormForActiveUsers
-); // Runs the task according to timing specified on env file
+// cron.schedule("* * * * *", JobController.testJob);
+// // cron.schedule(ENV.SCHEDULED_TIME_TO_RUN, JobController.sendGoogleFormForActiveUsers); // Runs every hour
+// cron.schedule(
+//   ENV.SCHEDULED_TIME_TO_RUN,
+//   JobController.sendGoogleFormForActiveUsers
+// ); // Runs the task according to timing specified on env file
 /* ===========================
   Mongoose + Server connection
   ===========================*/
