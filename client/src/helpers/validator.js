@@ -60,6 +60,13 @@ export default function formValidator(inputTypes, inputs) {
         isValid = false;
       }
     }
+    if (type === "cohort") {
+      const { cohort } = inputs;
+      errors.cohort = [];
+      if (cohort==="") {
+        errors.cohort.push("Please select a cohort.")
+      }
+    }
   });
 
   return { isValid, errors };
