@@ -54,6 +54,7 @@ export default function Form ({errors, classes, stage, inputs, handleInputChange
         <Register
         errors = {errors}
           inputs={inputs}
+          classes={classes}
           renderErrors={renderErrors}
           handleInputChange={(e) => handleInputChange(e)}
         />

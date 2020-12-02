@@ -4,7 +4,7 @@ import isEqual from "lodash.isequal";
 import omit from "lodash.omit";
 import AuthHeader from "./components/AuthHeader";
 import Form from "./components/form/Form";
-import FormStyle from "./styles/FormStyle";
+import TemplateStyles from "./styles/template";
 import Copyright from "./components/Copyright";
 import Welcome from "./components/Welcome";
 import requests from "./helpers/api";
@@ -18,7 +18,7 @@ import {
   UPDATED_TEXT,
   REGISTER,
 } from "./constants";
-const useStyles = FormStyle;
+const useStyles = TemplateStyles;
 
 export default function App() {
   const classes = useStyles();
@@ -29,6 +29,7 @@ export default function App() {
     full_name: "",
     active: false,
     mobile: "",
+    cohort: ""
   });
 
   const [stage, setStage] = useState(CHECK_EMAIL);
@@ -220,9 +221,14 @@ export default function App() {
     }
   }, [inputs, user, stage]);
 
-  // useEffect(() => {
-  //   console.log(errors);
-  // }, [errors]);
+  useEffect(()=> {
+    console.log(inputs)
+  }, [inputs])
+
+
+  useEffect(() => {
+    console.log(errors);
+  }, [errors]);
 
   return (
     <Grid container component="main" className={classes.root}>

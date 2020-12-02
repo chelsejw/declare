@@ -35,6 +35,10 @@ const requests = {
 
   getScheduledTime: () => {
     return axios.get(`${API_URL}/scheduled`)
+  },
+
+  getCohortList: () => {
+    return axios.get(`${API_URL}/cohorts`);
   }
 };
 
