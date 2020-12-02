@@ -5,6 +5,7 @@ const localMongo = `mongodb://localhost:27017/${ENV.DB_NAME}`;
 const mongoAtlas = `mongodb+srv://${ENV.DB_USER}:${ENV.DB_PASS}@${ENV.DB_HOST}/${ENV.DB_NAME}`;
 let dbType = ENV.DB_TYPE;
 const UserController = require(`./controllers/UserController`);
+const {getCohorts} = require(`./controllers/FormController`);
 const express = require("express");
 const app = express();
 const port = ENV.PORT || 4000;
@@ -30,6 +31,8 @@ app.use(express.json());
   API routes
   ===========================*/
 // app.get("/test", JobController.sendGoogleFormForActiveUsers);
+app.get("/cohorts", getCohorts);
+
 app.get("/scheduled", UserController.getScheduledTime);
 app.post("/exists", UserController.checkIfUserExists);
 app.post("/register", UserController.register);

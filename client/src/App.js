@@ -4,7 +4,7 @@ import isEqual from "lodash.isequal";
 import omit from "lodash.omit";
 import AuthHeader from "./components/AuthHeader";
 import Form from "./components/form/Form";
-import FormStyle from "./styles/FormStyle";
+import TemplateStyles from "./styles/template";
 import Copyright from "./components/Copyright";
 import Welcome from "./components/Welcome";
 import requests from "./helpers/api";
@@ -18,37 +18,31 @@ import {
   UPDATED_TEXT,
   REGISTER,
 } from "./constants";
-const useStyles = FormStyle;
+import defaultStates from './states/defaultStates'
+
+
+const useStyles = TemplateStyles;
 
 export default function App() {
   const classes = useStyles();
-  const [inputs, setInputs] = useState({
-    email: "",
-    password: "",
-    ga_email: "",
-    full_name: "",
-    active: false,
-    mobile: "",
-  });
 
-  const [stage, setStage] = useState(CHECK_EMAIL);
-  const [message, setMessage] = useState(
-    "If you are registered, you will be prompted to login. If not, you will be prompted to register."
+  /* ====================================
+  STATESSS
+  =====================================+*/
+  const [inputs, setInputs] = useState(defaultStates.inputs);
+  const [stage, setStage] = useState(defaultStates.stage);
+  const [message, setMessage] = useState(defaultStates.message);
+  const [errors, setErrors] = useState(defaultStates.errors);
+  const [buttonText, setButtonText] = useState(defaultStates.buttonText);
+  const [user, setUser] = useState(defaultStates.user);
+  const [loading, setLoading] = useState(defaultStates.loading);
+  const [profileChanged, setProfileChanged] = useState(
+    defaultStates.profileChanged
   );
 
-  const [errors, setErrors] = useState({
-    ga_email: [],
-    email: [],
-    full_name: [],
-    mobile: [],
-    password: [],
-  });
-
-  const [buttonText, setButtonText] = useState(CHECK_EMAIL);
-  const [user, setUser] = useState({ email: "" });
-  const [loading, setLoading] = useState(false);
-  const [profileChanged, setProfileChanged] = useState(false);
-
+  /* ====================================
+  HELPERS
+  =====================================+*/
   const syncInputsAndUserProfile = (updatedData) => {
     setInputs((prev) => ({ ...prev, ...updatedData }));
     setUser((prev) => ({ ...prev, ...updatedData }));
@@ -128,7 +122,9 @@ export default function App() {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
     return;
   };
-
+  /* ====================================
+  ACTIONS
+  =====================================+*/
   const checkIfUserExists = () => {
     const form = formValidator("email", inputs);
     setErrors((prev) => ({ ...prev, ...form.errors }));
@@ -168,7 +164,7 @@ export default function App() {
   };
 
   const updateUser = () => {
-    const form = formValidator("ga_email, mobile, full_name", inputs);
+    const form = formValidator("ga_email, mobile, full_name, cohort", inputs);
     setErrors((prev) => ({ ...prev, ...form.errors }));
     if (!form.isValid) return;
     setLoading(true);
@@ -186,7 +182,10 @@ export default function App() {
   };
 
   const registerUser = () => {
-    const form = formValidator("ga_email, password, mobile, full_name", inputs);
+    const form = formValidator(
+      "ga_email, password, mobile, full_name, cohort",
+      inputs
+    );
     setErrors((prev) => ({ ...prev, ...form.errors }));
     if (!form.isValid) return;
     setLoading(true);
@@ -216,13 +215,24 @@ export default function App() {
         return;
       }
       setProfileChanged(false);
-
     }
   }, [inputs, user, stage]);
 
-  // useEffect(() => {
-  //   console.log(errors);
-  // }, [errors]);
+  /* ====================================
+  DEBUGGING
+  =====================================+*/
+
+  useEffect(() => {
+    console.log(inputs);
+  }, [inputs]);
+
+  useEffect(() => {
+    console.log(errors);
+  }, [errors]);
+
+  /* ====================================
+  JSX
+  =====================================+*/
 
   return (
     <Grid container component="main" className={classes.root}>

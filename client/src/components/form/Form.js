@@ -10,15 +10,14 @@ import Login from "./Login";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import {CHECK_EMAIL, UPDATED, AUTHENTICATED, LOGIN, REGISTER} from '../../constants'
 
-export default function Form ({errors, classes, stage, inputs, handleInputChange, updateUser, loading, profileChanged, loginUser, user, checkIfUserExists, registerUser, buttonText}) {
-
-  const {email: emailErrors} = errors;
-  
+export default function Form ({errors, classes, stage, inputs, handleInputChange, updateUser, loading, profileChanged, loginUser, user, checkIfUserExists, registerUser, buttonText}) {  
   const renderErrors = (arrayOfMessages) => {
     return arrayOfMessages.map( (msg, index) => {
       return <span key={index}>{"*"} {msg} {" "}</span>
     })
   }
+    const { email: emailErrors } = errors;
+
   
   return (
     <form className={classes.form} noValidate>
@@ -54,6 +53,7 @@ export default function Form ({errors, classes, stage, inputs, handleInputChange
         <Register
         errors = {errors}
           inputs={inputs}
+          classes={classes}
           renderErrors={renderErrors}
           handleInputChange={(e) => handleInputChange(e)}
         />

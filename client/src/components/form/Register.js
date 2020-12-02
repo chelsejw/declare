@@ -1,11 +1,36 @@
-import React from "react";
-import { TextField } from "@material-ui/core";
+import React, { useState, useEffect } from "react";
+import { TextField, MenuItem, Select, InputLabel, FormControl, FormHelperText } from "@material-ui/core";
+import requests from "../../helpers/api";
 
-export default function Register({ inputs, handleInputChange, errors, renderErrors }) {
+export default function Register({
+  inputs,
+  handleInputChange,
+  errors,
+  renderErrors,
+  classes
+}) {
+  const { getCohortList } = requests;
+  const [cohorts, setCohorts] = useState([]);
+
+  let cohortItems = cohorts.map((name) => {
+    return <MenuItem value={name}>{name}</MenuItem>;
+  });
+
+  useEffect(() => {
+    getCohortList()
+      .then(({ data }) => {
+        setCohorts(data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  });
+
   const {
     ga_email: GAEmailErrors,
     mobile: mobileErrors,
     full_name: fullNameErrors,
+    cohort: cohortErrors
   } = errors;
   return (
     <div>
@@ -64,7 +89,6 @@ export default function Register({ inputs, handleInputChange, errors, renderErro
         label="Contact Number"
         name="mobile"
         autoComplete="mobile"
-        autoFocus
         value={inputs.mobile}
         onChange={(e) => handleInputChange(e)}
       />
@@ -79,10 +103,35 @@ export default function Register({ inputs, handleInputChange, errors, renderErro
         label="Full Name (as in NRIC)"
         name="full_name"
         autoComplete="full_name"
-        autoFocus
         value={inputs.full_name}
         onChange={(e) => handleInputChange(e)}
       />
+      <FormControl
+        className={classes.formControl}
+        error={cohortErrors.length > 0}
+      >
+        <InputLabel shrink id="cohortLabel">
+          Cohort Name
+        </InputLabel>{" "}
+        <Select
+          // variant="outlined"
+          labelId="cohortLabel"
+          id="cohort"
+          className={classes.selectEmpty}
+          displayEmpty
+          fullWidth
+          name="cohort"
+          // label="cohort name"
+          value={inputs.cohort}
+          placeholder="Cohort Name"
+          onChange={(e) => handleInputChange(e)}
+        >
+          {cohortItems}
+        </Select>
+        {cohortErrors.length > 0 && (
+          <FormHelperText>{renderErrors(cohortErrors)}</FormHelperText>
+        )}
+      </FormControl>
     </div>
   );
 }

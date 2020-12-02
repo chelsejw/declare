@@ -45,8 +45,8 @@ const controllers = {
 
     try {
       const newUser = await User.create({ ...req.body, password: argon2Hash });
-      let { ga_email, full_name, active, mobile, last_declared } = newUser;
-      let userDataToSend = { ga_email, full_name, active, mobile, email: newUser.email, last_declared };
+      let { ga_email, full_name, active, mobile, last_declared, cohort } = newUser;
+      let userDataToSend = { ga_email, full_name, active, mobile, email: newUser.email, last_declared, cohort };
       setResponse(res, false, "User was created successfully.", userDataToSend);
     } catch (err) {
       errorHandler(res, err, "There was an unexpected system error.");
@@ -62,8 +62,8 @@ const controllers = {
     try {
       const passwordVerified = await argon2.verify(user.password, password);
       if (passwordVerified) {
-        let { ga_email, full_name, active, mobile, last_declared } = user;
-        setResponse(res, false, "Login successful.", { email: user.email, ga_email, full_name, active, mobile, last_declared });
+        let { ga_email, full_name, active, mobile, last_declared, cohort } = user;
+        setResponse(res, false, "Login successful.", { email: user.email, ga_email, full_name, active, mobile, last_declared , cohort});
       } else {
         setResponse(res, true, "Password is incorrect.");
       }
@@ -87,10 +87,10 @@ const controllers = {
   },
 
   updateUser: async (req, res) => {
-    let { email, ga_email, full_name, active, mobile } = req.body;
+    let { email, ga_email, full_name, active, mobile, cohort } = req.body;
     User.findOneAndUpdate(
       { email },
-      { ga_email, full_name, active, mobile },
+      { ga_email, full_name, active, mobile, cohort },
       { new: true } // returns the updated document
     )
       .then((updatedUser) => {
@@ -100,7 +100,8 @@ const controllers = {
           full_name: updatedUser.full_name,
           active: updatedUser.active,
           mobile: updatedUser.mobile,
-          last_declared: updatedUser.last_declared
+          last_declared: updatedUser.last_declared,
+          cohort: updatedUser.cohort
         }
         setResponse(res, false, "Update was successful.", userDataToSend);
       })
