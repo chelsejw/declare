@@ -65,6 +65,7 @@ export default function formValidator(inputTypes, inputs) {
       errors.cohort = [];
       if (cohort==="") {
         errors.cohort.push("Please select a cohort.")
+        isValid = false;
       }
     }
   });
