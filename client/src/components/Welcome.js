@@ -46,16 +46,11 @@ export default function Welcome() {
           )}
         </Typography>
       </Box>
+
       <Box mb={2}>
         <Typography variant="body2" color="textSecondary" align="center">
-          Quick FAQ: Who is the app for? Currently, it{" "}
-          <Typography variant="body2" display="inline" color="textPrimary">
-            only sends forms for SG-SEIF 3 students
-          </Typography>
-          . Things taking a while to load? The API might be restarting after
-          being idle. Forgot your password? The app has no feature to reset your
-          password at the moment LOL. If there are any unaddressed issues or
-          errors, Slack me the details (
+          If you have any feedback, unaddressed issues or errors, do Slack me the
+          details (
           <Link
             color="primary"
             href="https://ga-students.slack.com/team/UTK6D0FF1"
