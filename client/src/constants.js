@@ -4,4 +4,4 @@ export const AUTHENTICATED = "authenticated";
 export const UPDATED = "updated profile";
 export const LOGIN = "login";
 export const REGISTER = "register";
-export const API_URL = "http://localhost:4000";
+export const API_URL = "https://declaration-api.herokuapp.com";
