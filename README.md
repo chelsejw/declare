@@ -16,7 +16,7 @@ Depending on your package manager, install the required depencies in both apps. 
 
 Do `yarn install` OR `npm i` from both `/client` and `/api` folders to install the necessary dependencies.
 
-Create a `.env` in `/api` for the MongoDB connection, following `.env.example`. 
+Create a `.env` in `/api` to set up the app, following `.env.example`. 
 
 To start either app, do `npm start` or `yarn start` from their respective root folders.
 
@@ -29,6 +29,10 @@ To start either app, do `npm start` or `yarn start` from their respective root f
 ✅  Setup backend to send forms periodically
 
 ✅   Validation for frontend input
+
+❗️  Allow users to customise the form to send out + choose cohort
+
+❗️  Add compatibility for Instructor declaration forms
 
 ❗️  Notify user via email for every declaration submitted? (Users should be able to turn on/off the feature. Or they can enable emails only when the service fails.) 
 
