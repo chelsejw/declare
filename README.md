@@ -30,7 +30,9 @@ To start either app, do `npm start` or `yarn start` from their respective root f
 
 ✅   Validation for frontend input
 
-❗️  Allow users to customise the form to send out + choose cohort
+✅   Users can choose cohort name
+
+❗️  Allow users to configure the fields to send out
 
 ❗️  Add compatibility for Instructor declaration forms
 
