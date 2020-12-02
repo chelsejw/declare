@@ -2,7 +2,7 @@ const qs = require("qs");
 const axios = require("axios");
 
 const createPostRequest = (userType, user) => {
-  const { email, ga_email, mobile, full_name } = user;
+  const { email, ga_email, mobile, full_name, cohort } = user;
   const date = new Date();
   const currentDay = date.getDate();
   const currentMonth = date.getMonth() + 1;
@@ -11,7 +11,7 @@ const createPostRequest = (userType, user) => {
     ["entry.1315738832_year"]: currentYear, // Today's Date - Year
     ["entry.1315738832_month"]: currentMonth, // Today's Date - Month
     ["entry.1315738832_day"]: currentDay, // Today's Date - Day
-    ["entry.2139343058"]: "SEIF 3", // Cohort Class (e.g. SEIF 3, DSI 18)
+    ["entry.2139343058"]: cohort, // Cohort Class (e.g. SEIF 3, DSI 18)
     ["entry.350879435"]: full_name, // Your name (as per in NRIC) *
     ["entry.1443611571"]: mobile, // Contact Number
     ["entry.88756219"]: ga_email, // Your Email Address (the one you used to register for the GA course) *
