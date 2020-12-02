@@ -4,7 +4,7 @@ An app to automatically send the GA declaration form every week at a specified t
 
 ## Notable Technologies: Backend
 - Express
-- Cron (node-cron): for scheduling tasks to run
+- Heroku with Scheduler Add-on (runs `api/jobs/sendGoogleForm.js` every day)
 
 ## Notable Technologies: Frontend
 - React
