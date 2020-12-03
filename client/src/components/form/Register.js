@@ -24,7 +24,7 @@ export default function Register({
       .catch((err) => {
         console.error(err);
       });
-  });
+  }, []);
 
   const {
     ga_email: GAEmailErrors,
