@@ -2,7 +2,6 @@ const CreatePostRequest = require("./modules/createPostRequest");
 const callRequestInBatches = require("./modules/callRequestInBatches");
 const connectToDBAndRun = require("./connectToDBAndRun");
 const UserModel = require("../models/user");
-const moment = require("moment");
 
 function getFormattedDate() {
   var date = new Date();
