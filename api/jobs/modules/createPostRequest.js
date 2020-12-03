@@ -1,6 +1,3 @@
-require("dotenv").config();
-const ENV = process.env;
-const ENVIRONMENT = ENV.NODE_ENV;
 const qs = require("qs");
 const axios = require("axios");
 
