@@ -2,8 +2,8 @@ const qs = require("qs");
 const axios = require("axios");
 
 const createPostRequest = (formType, user) => {
-  console.log(`Creating post request for ${formType}: ${user.full_name}`);
   const { email, ga_email, mobile, full_name } = user;
+  console.log(`Creating post request to the ${formType} form for ${full_name}`);
   const date = new Date();
   const currentDay = date.getDate();
   const currentMonth = date.getMonth() + 1;
@@ -58,7 +58,6 @@ const createPostRequest = (formType, user) => {
   };
 
   let formData, postEndpoint;
-
   if (formType === "test") {
     formData = qs.stringify(testForm);
     postEndpoint = `https://docs.google.com/forms/u/0/d/e/1FAIpQLSeFUYvoZykDfxUPPsmEWgfJWa9WLXgcZ356xFs5ZoFwGsj7ng/formResponse`;
@@ -69,10 +68,12 @@ const createPostRequest = (formType, user) => {
   return axios
     .post(postEndpoint, formData)
     .then((_) => {
-      // If app is in production, upon succesful submission, update user's last declared field.
+      console.log(`Successfully submitted the ${formType} form for ${full_name}!`)
+      // Update student's last declared only if the actual GA form was submitted
       if (formType === "student") {
         user.last_declared = date;
         user.save();
+        console.log(`Updated last declared status for ${full_name}`);
       }
     })
     .catch((err) => console.error(err));
