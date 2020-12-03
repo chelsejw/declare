@@ -56,8 +56,8 @@ const FAQ = [
   },
 ];
 
-const items = FAQ.map(({ question, answer }) => {
-  return <FAQItem question={question} answer={answer} />;
+const items = FAQ.map(({ question, answer }, index) => {
+  return <FAQItem key={index} question={question} answer={answer} />;
 });
 
 const FAQModal = ({ open, onClose }) => {

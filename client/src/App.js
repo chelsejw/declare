@@ -222,13 +222,13 @@ export default function App() {
   DEBUGGING
   =====================================+*/
 
-  useEffect(() => {
-    console.log(inputs);
-  }, [inputs]);
+  // useEffect(() => {
+  //   console.log(inputs);
+  // }, [inputs]);
 
-  useEffect(() => {
-    console.log(errors);
-  }, [errors]);
+  // useEffect(() => {
+  //   console.log(errors);
+  // }, [errors]);
 
   /* ====================================
   JSX
