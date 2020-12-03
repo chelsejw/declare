@@ -4,8 +4,8 @@ const ENVIRONMENT = ENV.NODE_ENV;
 const qs = require("qs");
 const axios = require("axios");
 
-const createPostRequest = (userType, user) => {
-  console.log(`Creating post request for ${userType}: ${user.full_name}`);
+const createPostRequest = (formType, user) => {
+  console.log(`Creating post request for ${formType}: ${user.full_name}`);
   const { email, ga_email, mobile, full_name } = user;
   const date = new Date();
   const currentDay = date.getDate();
@@ -62,7 +62,7 @@ const createPostRequest = (userType, user) => {
 
   let formData, postEndpoint;
 
-  if (userType === "test") {
+  if (formType === "test") {
     formData = qs.stringify(testForm);
     postEndpoint = `https://docs.google.com/forms/u/0/d/e/1FAIpQLSeFUYvoZykDfxUPPsmEWgfJWa9WLXgcZ356xFs5ZoFwGsj7ng/formResponse`;
   } else {
@@ -73,7 +73,7 @@ const createPostRequest = (userType, user) => {
     .post(postEndpoint, formData)
     .then((_) => {
       // If app is in production, upon succesful submission, update user's last declared field.
-      if (ENVIRONMENT === "production") {
+      if (formType === "student") {
         user.last_declared = date;
         user.save();
       }
