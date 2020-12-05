@@ -1,6 +1,6 @@
 const CreatePostRequest = require("./modules/createPostRequest");
 const callRequestInBatches = require("./modules/callRequestInBatches");
-const connectToDBAndRun = require("./connectToDBAndRun");
+const connectToDBAndRun = require("./modules/connectToDBAndRun");
 const UserModel = require("../models/user");
 
 function getFormattedDate() {
