@@ -1,24 +1,43 @@
-import React from 'react';
+import React from 'react'
+import { Grid, TextField, Button } from '@material-ui/core'
+import Register from './Register'
+import ActiveSwitch from './ActiveSwitch'
+import Login from './Login'
+import ScaleLoader from 'react-spinners/ScaleLoader'
 import {
-  Grid,
-  TextField,
-  Button,
-} from "@material-ui/core";
-import Register from "./Register";
-import ActiveSwitch from "./ActiveSwitch";
-import Login from "./Login";
-import ScaleLoader from "react-spinners/ScaleLoader";
-import {CHECK_EMAIL, UPDATED, AUTHENTICATED, LOGIN, REGISTER} from '../../constants'
+  CHECK_EMAIL,
+  UPDATED,
+  AUTHENTICATED,
+  LOGIN,
+  REGISTER,
+} from '../../constants'
 
-export default function Form ({errors, classes, stage, inputs, handleInputChange, updateUser, loading, profileChanged, loginUser, user, checkIfUserExists, registerUser, buttonText}) {  
+export default function Form({
+  errors,
+  classes,
+  stage,
+  inputs,
+  handleInputChange,
+  updateUser,
+  loading,
+  profileChanged,
+  loginUser,
+  user,
+  checkIfUserExists,
+  registerUser,
+  buttonText,
+}) {
   const renderErrors = (arrayOfMessages) => {
-    return arrayOfMessages.map( (msg, index) => {
-      return <span key={index}>{"*"} {msg} {" "}</span>
+    return arrayOfMessages.map((msg, index) => {
+      return (
+        <span key={index}>
+          {'*'} {msg}{' '}
+        </span>
+      )
     })
   }
-    const { email: emailErrors } = errors;
+  const { email: emailErrors } = errors
 
-  
   return (
     <form className={classes.form} noValidate>
       {
@@ -48,11 +67,10 @@ export default function Form ({errors, classes, stage, inputs, handleInputChange
           renderErrors={renderErrors}
         />
       )}
-      
 
       {(stage === REGISTER || stage === AUTHENTICATED || stage === UPDATED) && (
         <Register
-        errors = {errors}
+          errors={errors}
           inputs={inputs}
           classes={classes}
           renderErrors={renderErrors}
@@ -79,23 +97,23 @@ export default function Form ({errors, classes, stage, inputs, handleInputChange
           ((stage === UPDATED || stage === AUTHENTICATED) && !profileChanged)
         } // If loading is true, no other requests should be sent.
         onClick={(e) => {
-          e.preventDefault();
+          e.preventDefault()
           switch (stage) {
             case CHECK_EMAIL:
-              checkIfUserExists();
-              break;
+              checkIfUserExists()
+              break
             case LOGIN:
-              loginUser();
-              break;
+              loginUser()
+              break
             case REGISTER:
-              registerUser();
-              break;
+              registerUser()
+              break
             case AUTHENTICATED:
             case UPDATED:
-              updateUser();
-              break;
+              updateUser()
+              break
             default:
-              return;
+              return
           }
         }}
       >
@@ -108,6 +126,5 @@ export default function Form ({errors, classes, stage, inputs, handleInputChange
         )}
       </Button>
     </form>
-  );
-  
+  )
 }

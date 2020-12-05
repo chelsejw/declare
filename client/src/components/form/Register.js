@@ -1,38 +1,49 @@
-import React, { useState, useEffect } from "react";
-import { TextField, MenuItem, Select, InputLabel, FormControl, FormHelperText } from "@material-ui/core";
-import requests from "../../helpers/api";
+import React, { useState, useEffect } from 'react'
+import {
+  TextField,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
+  FormHelperText,
+} from '@material-ui/core'
+import requests from '../../helpers/api'
 
 export default function Register({
   inputs,
   handleInputChange,
   errors,
   renderErrors,
-  classes
+  classes,
 }) {
-  const { getCohortList } = requests;
-  const [cohorts, setCohorts] = useState(["SEIF 3"]);
+  const { getCohortList } = requests
+  const [cohorts, setCohorts] = useState(['SEIF 3'])
 
   let cohortItems = cohorts.map((name, index) => {
-    return <MenuItem key={index} value={name}>{name}</MenuItem>;
-  });
+    return (
+      <MenuItem key={index} value={name}>
+        {name}
+      </MenuItem>
+    )
+  })
 
   useEffect(() => {
     getCohortList()
       .then(({ data }) => {
-        setCohorts(data);
+        setCohorts(data)
       })
       .catch((err) => {
-        console.error(err);
-      });
-  }, []);
+        console.error(err)
+      })
+  }, [])
 
   const {
     ga_email: GAEmailErrors,
     mobile: mobileErrors,
     full_name: fullNameErrors,
     cohort: cohortErrors,
-    user_type: userTypeErrors
-  } = errors;
+    user_type: userTypeErrors,
+  } = errors
   return (
     <div>
       <TextField
@@ -113,7 +124,7 @@ export default function Register({
       >
         <InputLabel shrink id="cohortLabel">
           Cohort Name
-        </InputLabel>{" "}
+        </InputLabel>{' '}
         <Select
           labelId="cohortLabel"
           id="cohort"
@@ -137,7 +148,7 @@ export default function Register({
       >
         <InputLabel shrink id="user_typeLabel">
           User Type
-        </InputLabel>{" "}
+        </InputLabel>{' '}
         <Select
           // variant="outlined"
           labelId="user_typeLabel"
@@ -153,12 +164,11 @@ export default function Register({
         >
           <MenuItem value="student">Student</MenuItem>;
           <MenuItem value="team">GA Team</MenuItem>;
-
         </Select>
         {userTypeErrors.length > 0 && (
           <FormHelperText>{renderErrors(userTypeErrors)}</FormHelperText>
         )}
       </FormControl>
     </div>
-  );
+  )
 }

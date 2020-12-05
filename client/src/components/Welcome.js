@@ -1,22 +1,23 @@
-import React, { useEffect, useState } from "react";
-import requests from "../helpers/api";
-import { Typography, Box, Link, CircularProgress } from "@material-ui/core";
+import React, { useEffect, useState } from 'react'
+import { Typography, Box, Link, CircularProgress } from '@material-ui/core'
+import requests from '../helpers/api'
+
 export default function Welcome() {
-  const { getScheduledTime } = requests;
-  const [loadingScheduledTime, setLoadingScheduledTime] = useState(true);
-  const [scheduledTime, setScheduledTime] = useState("");
+  const { getScheduledTime } = requests
+  const [loadingScheduledTime, setLoadingScheduledTime] = useState(true)
+  const [scheduledTime, setScheduledTime] = useState('')
   useEffect(() => {
     getScheduledTime()
       .then(({ data }) => {
-        setScheduledTime(data);
-        setLoadingScheduledTime(false);
+        setScheduledTime(data)
+        setLoadingScheduledTime(false)
       })
       .catch((err) => {
-        console.error(err);
-        setLoadingScheduledTime(false);
-        setScheduledTime("Error getting scheduled time from server.");
-      });
-  }, []);
+        console.error(err)
+        setLoadingScheduledTime(false)
+        setScheduledTime('Error getting scheduled time from server.')
+      })
+  }, [])
 
   return (
     <div>
@@ -24,9 +25,14 @@ export default function Welcome() {
         <Typography variant="body1" color="textSecondary" align="center">
           This app was built to help our students focus on what matters the most
           – not weekly declaration forms. Subscribed users will have their
-          <Typography variant="body1" component={"span"} display="inline" color="textPrimary">
-            {" "}
-            all-clear declaration forms{" "}
+          <Typography
+            variant="body1"
+            component={'span'}
+            display="inline"
+            color="textPrimary"
+          >
+            {' '}
+            all-clear declaration forms{' '}
           </Typography>
           sent out at the specified time. Users can choose to deactivate the
           service as they wish. Please use this app responsibly, and turn off
@@ -35,12 +41,22 @@ export default function Welcome() {
         </Typography>
       </Box>
       <Box mb={2}>
-        <Typography variant="body1" component={"div"} color="textSecondary" align="center">
-          The app is currently set to send out declarations every:{" "}
+        <Typography
+          variant="body1"
+          component={'div'}
+          color="textSecondary"
+          align="center"
+        >
+          The app is currently set to send out declarations every:{' '}
           {loadingScheduledTime ? (
             <CircularProgress color="secondary" hidden={loadingScheduledTime} />
           ) : (
-            <Typography variant="body1" component={"span"} display="inline" color="textPrimary">
+            <Typography
+              variant="body1"
+              component={'span'}
+              display="inline"
+              color="textPrimary"
+            >
               {scheduledTime}
             </Typography>
           )}
@@ -49,8 +65,8 @@ export default function Welcome() {
 
       <Box mb={2}>
         <Typography variant="body2" color="textSecondary" align="center">
-          If you have any feedback, unaddressed issues or errors, do Slack me the
-          details (
+          If you have any feedback, unaddressed issues or errors, do Slack me
+          the details (
           <Link
             color="primary"
             href="https://ga-students.slack.com/team/UTK6D0FF1"
@@ -61,5 +77,5 @@ export default function Welcome() {
         </Typography>
       </Box>
     </div>
-  );
+  )
 }

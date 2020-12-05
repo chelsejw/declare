@@ -1,5 +1,5 @@
 import React from 'react'
-import { Typography, Box } from "@material-ui/core";
+import { Typography, Box } from '@material-ui/core'
 
 const FAQItem = (props) => {
   return (
@@ -11,7 +11,7 @@ const FAQItem = (props) => {
         {props.answer}
       </Typography>
     </Box>
-  );
+  )
 }
 
-export default FAQItem;
+export default FAQItem
