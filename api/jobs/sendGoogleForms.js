@@ -22,7 +22,7 @@ const sendGoogleForms = async () => {
   const allPostRequests = activeUsers.map((user) => {
     // Create the post request to submit the form for each active user.
     return CreatePostRequest(
-      ENVIRONMENT === "production" ? "student" : "test",
+      user.type, // Should be "team" or "student"
       user
     ); // If app is not in production, just use test requests
   });

@@ -106,7 +106,7 @@ const createPostRequest = (formType, user) => {
     .then((_) => {
       console.log(`Successfully submitted the ${formType} form for ${full_name}!`)
       // Update student's last declared only if the actual GA form was submitted
-      if (formType === "student" || formType === "team") {
+      if (formType !== "test" ) {
         user.last_declared = date;
         user.save();
         console.log(`Updated last declared status for ${full_name}`);
