@@ -2,62 +2,64 @@
 
 An app to automatically send the GA declaration form every week at a specified time, for the subscribed users.
 
-## Notable Technologies: Backend
+# Notable Technologies: Backend
+
 - Express
 - Heroku with Scheduler Add-on (runs `api/jobs/sendGoogleForm.js` every day)
 
-## Notable Technologies: Frontend
+# Notable Technologies: Frontend
+
 - React
 - Material UI
 
-## Setup Instructions
+# Setup Instructions
 
-Please not that this is two separate apps - a React `client` and and Express `api`.
+This repository has two separate apps - a React `client` and an Express `api`.
 
-### STEP 1: Set the Environment Variables
+## STEP 1: Set the Environment Variables
 
-Create a `.env` in `/api` following `.env.example`. Be sure to remove all comments. 
+Create a `.env` in `/api` following `.env.example`. Be sure to remove all comments.
+
+### FOR API
 
 - `DB_USER`: Your Mongo Atlas username (_you don't need this if using your localhost MongoDB_)
 - `DB_PASS`: Your Mongo Atlas password (_you don't need this if using your localhost MongoDB_)
 - `DB_HOST`= Your Mongo Atlas host. (_you don't need this if using your localhost MongoDB_)
 
 - `DB_NAME`: Name of your database
-- `DB_TYPE`:  If this is not set to a string _"atlas"_, it will default to using your localhost DB.
+- `DB_TYPE`: If this is not set to a string _"atlas"_, it will default to using your localhost DB.
 - `SCHEDULED_DAY` This will affect the declaration day showed on the client. Should be a number from 0 - 6. (0 being Sunday, 6 being Saturday.)
--  `SCHEDULED_TIME_IN_HOURS`: This will affect the declaration time showed on the client. Should be a number from 0 - 23
+- `SCHEDULED_TIME_IN_HOURS`: This will affect the declaration time showed on the client. Should be a number from 0 - 23
 - `NODE_ENV` _this should be either "production" or "development"_
 
-### STEP 3: Configure client to use your localhost as API
+### FOR CLIENT
 
-In `client/src/constants.js` , change `const API_URL` to point to your localhost, in this case it would be.
+Create a `.env` in `/client` following `.env.example`.
 
-````
-export const API_URL = "http://localhost:4000";
-````
-Remember NOT to commit this file!
+- `REACT_APP_API_URL`: The API endpoint the client will interact with. The default should be
 
-### STEP 4: Start the apps
+```
+REACT_APP_API_URL=http://localhost:4000
+```
+
+## STEP 3: Start the apps
 
 For `api` you can use `yarn dev` if you have `nodemon` installed, if not `yarn start`
 
 For client, just `yarn start`
 
+# Features
 
-# Goals 
+✅ Setup frontend for basic authentication & CRUD (without sessions/cookies/JWT)
 
-✅  Setup frontend for basic authentication & CRUD (without sessions/cookies/JWT)
+✅ Setup backend for CRUD (is delete necessary?)
 
-✅  Setup backend for CRUD (is delete necessary?)
+✅ Setup backend to send forms periodically
 
-✅  Setup backend to send forms periodically
+✅ Validation for frontend input
 
-✅   Validation for frontend input
+✅ Users can choose cohort name
 
-✅   Users can choose cohort name
+✅ Add compatibility for Team declaration forms
 
-✅  Add compatibility for Team declaration forms
-
-❗️  Notify user via email for every declaration submitted? (Users should be able to turn on/off the feature. Or they can enable emails only when the service fails.) 
-
-
+❗️ Notify user via email for every declaration submitted? (Users should be able to turn on/off the feature. Or they can enable emails only when the service fails.)
