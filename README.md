@@ -2,25 +2,25 @@
 
 An app to automatically send the GA declaration form every week at a specified time, for the subscribed users.
 
-# Notable Technologies: Backend
+## Notable Technologies: Backend
 
 - Express
 - Heroku with Scheduler Add-on (runs `api/jobs/sendGoogleForm.js` every day)
 
-# Notable Technologies: Frontend
+## Notable Technologies: Frontend
 
 - React
 - Material UI
 
-# Setup Instructions
+## Setup Instructions
 
 This repository has two separate apps - a React `client` and an Express `api`.
 
-## STEP 1: Set the Environment Variables
+### STEP 1: Set the Environment Variables
 
 Create a `.env` in `/api` following `.env.example`. Be sure to remove all comments.
 
-### FOR API
+#### FOR API
 
 - `DB_USER`: Your Mongo Atlas username (_you don't need this if using your localhost MongoDB_)
 - `DB_PASS`: Your Mongo Atlas password (_you don't need this if using your localhost MongoDB_)
@@ -32,7 +32,7 @@ Create a `.env` in `/api` following `.env.example`. Be sure to remove all commen
 - `SCHEDULED_TIME_IN_HOURS`: This will affect the declaration time showed on the client. Should be a number from 0 - 23
 - `NODE_ENV` _this should be either "production" or "development"_
 
-### FOR CLIENT
+#### FOR CLIENT
 
 Create a `.env` in `/client` following `.env.example`.
 
@@ -42,13 +42,13 @@ Create a `.env` in `/client` following `.env.example`.
 REACT_APP_API_URL=http://localhost:4000
 ```
 
-## STEP 3: Start the apps
+### STEP 3: Start the apps
 
 For `api` you can use `yarn dev` if you have `nodemon` installed, if not `yarn start`
 
 For client, just `yarn start`
 
-# Features
+## Features
 
 ✅ Setup frontend for basic authentication & CRUD (without sessions/cookies/JWT)
 
