@@ -32,7 +32,7 @@ const FAQ = [
   {
     question: "Who is this app for?",
     answer:
-      "Currently, it's for GA SG students. I am looking into adding support for the GA SG Team declarations as well. You may check the Github Repo link for planned features / updates.",
+      "It's for GA SG students and team.",
   },
   {
     question: "Things taking a while to load?",
