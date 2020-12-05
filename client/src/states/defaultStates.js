@@ -9,6 +9,7 @@ const defaultStates = {
     active: false,
     mobile: "",
     cohort: "",
+    type: ""
   },
   message:
     "If you are registered, you will be prompted to login. If not, you will be prompted to register.",

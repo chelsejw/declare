@@ -24,7 +24,7 @@ export default function Welcome() {
         <Typography variant="body1" color="textSecondary" align="center">
           This app was built to help our students focus on what matters the most
           – not weekly declaration forms. Subscribed users will have their
-          <Typography variant="body1" display="inline" color="textPrimary">
+          <Typography variant="body1" component={"span"} display="inline" color="textPrimary">
             {" "}
             all-clear declaration forms{" "}
           </Typography>
@@ -35,12 +35,12 @@ export default function Welcome() {
         </Typography>
       </Box>
       <Box mb={2}>
-        <Typography variant="body1" color="textSecondary" align="center">
+        <Typography variant="body1" component={"div"} color="textSecondary" align="center">
           The app is currently set to send out declarations every:{" "}
           {loadingScheduledTime ? (
             <CircularProgress color="secondary" hidden={loadingScheduledTime} />
           ) : (
-            <Typography variant="body1" display="inline" color="textPrimary">
+            <Typography variant="body1" component={"span"} display="inline" color="textPrimary">
               {scheduledTime}
             </Typography>
           )}
