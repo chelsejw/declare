@@ -12,15 +12,39 @@ An app to automatically send the GA declaration form every week at a specified t
 
 ## Setup Instructions
 
-Depending on your package manager, install the required depencies in both apps. I used `Yarn` in development.
+Please not that this is two separate apps - a React `client` and and Express `api`.
 
-Do `yarn install` OR `npm i` from both `/client` and `/api` folders to install the necessary dependencies.
+### STEP 1: Set the Environment Variables
 
-Create a `.env` in `/api` to set up the app, following `.env.example`. 
+Create a `.env` in `/api` following `.env.example`. Be sure to remove all comments. 
 
-To start either app, do `npm start` or `yarn start` from their respective root folders.
+- `DB_USER`: Your Mongo Atlas username (_you don't need this if using your localhost MongoDB_)
+- `DB_PASS`: Your Mongo Atlas password (_you don't need this if using your localhost MongoDB_)
+- `DB_HOST`= Your Mongo Atlas host. (_you don't need this if using your localhost MongoDB_)
 
-## Goals 
+- `DB_NAME`: Name of your database
+- `DB_TYPE`:  If this is not set to a string _"atlas"_, it will default to using your localhost DB.
+- `SCHEDULED_DAY` This will affect the declaration day showed on the client. Should be a number from 0 - 6. (0 being Sunday, 6 being Saturday.)
+-  `SCHEDULED_TIME_IN_HOURS`: This will affect the declaration time showed on the client. Should be a number from 0 - 23
+- `NODE_ENV` _this should be either "production" or "development"_
+
+### STEP 3: Configure client to use your localhost as API
+
+In `client/src/constants.js` , change `const API_URL` to point to your localhost, in this case it would be.
+
+````
+export const API_URL = "http://localhost:4000";
+````
+Remember NOT to commit this file!
+
+### STEP 4: Start the apps
+
+For `api` you can use `yarn dev` if you have `nodemon` installed, if not `yarn start`
+
+For client, just `yarn start`
+
+
+# Goals 
 
 ✅  Setup frontend for basic authentication & CRUD (without sessions/cookies/JWT)
 
@@ -31,8 +55,6 @@ To start either app, do `npm start` or `yarn start` from their respective root f
 ✅   Validation for frontend input
 
 ✅   Users can choose cohort name
-
-❗️  Allow users to configure the fields to send out
 
 ✅  Add compatibility for Team declaration forms
 
