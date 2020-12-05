@@ -1,53 +1,50 @@
-require("dotenv").config();
-const ENV = process.env;
-const mongoose = require("mongoose");
-const localMongo = `mongodb://localhost:27017/${ENV.DB_NAME}`;
-const mongoAtlas = `mongodb+srv://${ENV.DB_USER}:${ENV.DB_PASS}@${ENV.DB_HOST}/${ENV.DB_NAME}`;
-let dbType = ENV.DB_TYPE;
-const UserController = require(`./controllers/UserController`);
-const {getCohorts} = require(`./controllers/FormController`);
-const express = require("express");
-const app = express();
-const port = ENV.PORT || 4000;
-const environment = ENV.NODE_ENV;
+require('dotenv').config()
+const mongoose = require('mongoose')
+const router = require('./routes')
+const express = require('express')
+const cors = require('cors')
 
-const cors = require("cors");
+const {
+  DB_USER,
+  DB_PASS,
+  DB_HOST,
+  DB_NAME,
+  DB_TYPE,
+  PORT,
+  NODE_ENV,
+} = process.env
+const port = PORT || 4000
+const localMongo = `mongodb://localhost:27017/${DB_NAME}`
+const mongoAtlas = `mongodb+srv://${DB_USER}:${DB_PASS}@${DB_HOST}/${DB_NAME}`
+const app = express()
+
 /* ===========================
   Express middleware configuration
   ===========================*/
 const whiteList =
-  environment === "development"
-    ? ["https://ga-declaration.herokuapp.com", "http://localhost:3000"]
-    : "https://ga-declaration.herokuapp.com";
+  NODE_ENV === 'development'
+    ? ['https://ga-declaration.herokuapp.com', 'http://localhost:3000']
+    : 'https://ga-declaration.herokuapp.com'
 
 const corsConfigs = {
   origin: whiteList,
-  methods: ["GET", "POST", "PATCH"],
-};
-app.use(cors(corsConfigs));
-app.use(express.json());
+  methods: ['GET', 'POST', 'PATCH'],
+}
+app.use(cors(corsConfigs))
+app.use(express.json())
 
 /* ===========================
   API routes
   ===========================*/
 // app.get("/test", JobController.sendGoogleFormForActiveUsers);
-app.get("/cohorts", getCohorts);
-
-app.get("/scheduled", UserController.getScheduledTime);
-app.post("/exists", UserController.checkIfUserExists);
-app.post("/register", UserController.register);
-app.patch("/update", UserController.updateUser);
-app.post("/login", UserController.login);
-app.get("*", (_, res) => {
-  res.status(404).send(`No such resource was found.`);
-});
+app.use('/', router)
 
 /* ===========================
   JOBS SCHEDULED
   ===========================*/
 
-/* 
-  CRON TIME FORMAT 
+/*
+  CRON TIME FORMAT
   seconds(optional) | min | hour | day (of the month) | month | day (of the week)
   */
 
@@ -62,7 +59,7 @@ app.get("*", (_, res) => {
   ===========================*/
 
 mongoose
-  .connect(dbType === "atlas" ? mongoAtlas : localMongo, {
+  .connect(DB_TYPE === 'atlas' ? mongoAtlas : localMongo, {
     // Will use different connection URI depending on env settings
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -70,15 +67,15 @@ mongoose
   })
   .then((_) => {
     // DB connected successfully
-    console.log("DB connection successful");
-    console.log(`Using ${dbType} connection`);
+    console.log('DB connection successful')
+    console.log(`Using ${DB_TYPE} connection`)
 
     app.listen(port, () => {
-      console.log(`Declare API is running on port: ${port}`);
-      console.log(`The environment is currently set to ${environment}`);
-    });
+      console.log(`Declare API is running on port: ${port}`)
+      console.log(`The environment is currently set to ${NODE_ENV}`)
+    })
   })
   .catch((err) => {
-    console.error(err);
-    console.log(`Error while trying to connect to ${dbType} connection`);
-  });
+    console.error(err)
+    console.log(`Error while trying to connect to ${DB_TYPE} connection`)
+  })
