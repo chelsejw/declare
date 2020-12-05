@@ -34,7 +34,7 @@ To start either app, do `npm start` or `yarn start` from their respective root f
 
 ❗️  Allow users to configure the fields to send out
 
-❗️  Add compatibility for Instructor declaration forms
+✅  Add compatibility for Team declaration forms
 
 ❗️  Notify user via email for every declaration submitted? (Users should be able to turn on/off the feature. Or they can enable emails only when the service fails.) 
 
