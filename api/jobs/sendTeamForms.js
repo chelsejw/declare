@@ -23,10 +23,10 @@ function getFormattedDate() {
 
 const sendGoogleForms = async () => {
   console.log(`The date and time is`, getFormattedDate());
-  const activeUsers = await UserModel.find({ active: true });
+  const activeUsers = await UserModel.find({ active: true, user_type: "team" });
   const allPostRequests = activeUsers.map((user) => {
     // Create the post request to submit the form for each active user.
-    return CreatePostRequest("test", user);
+    return CreatePostRequest("team", user);
   });
   await callRequestInBatches(allPostRequests, 5); // Post the request in batches of 5"
 };

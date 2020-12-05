@@ -1,9 +1,9 @@
 const qs = require("qs");
 const axios = require("axios");
 
-const createPostRequest = (formType, user) => {
+const createPostRequest = (userType, user) => {
   const { email, ga_email, mobile, full_name } = user;
-  console.log(`Creating post request to the ${formType} form for ${full_name}`);
+  console.log(`Creating post request to the ${userType} form for ${full_name}`);
   const date = new Date();
   const currentDay = date.getDate();
   const currentMonth = date.getMonth() + 1;
@@ -57,20 +57,57 @@ const createPostRequest = (formType, user) => {
     ["entry.914351031_day"]: currentDay,
   };
 
+  const teamForm = {
+    ["entry.1315738832_year"]: currentYear,
+    ["entry.1315738832_month"]: currentDay,
+    ["entry.1315738832_day"]: currentMonth,
+
+    /* If you answer "Yes" to the above question, please let us know the END DATE of the QO, LOA or SHN.*/
+    // ["entry.597915666_year"]: 2020,
+    // ["entry.597915666_month"]: 12,
+    // ["entry.597915666_day"]: 4,
+
+    ["entry.350879435"]: full_name,
+    ["entry.1443611571"]: mobile,
+    ["entry.88756219"]: ga_email,
+    // ["entry.2095552297"]:  Have you traveled outside of Singapore within the last 14 days? If you answer "Yes" to the above question, please list the country and the date you arrived back into Singapore.
+    ["entry.1464206896"]: "No",
+    ["entry.1351260288"]: "None of the Above",
+    ["entry.1840918119"]: "No",
+    ["entry.472021917"]: "No",
+    ["entry.1296804660"]: "None of the above",
+    ["entry.1655462793"]: "No",
+    ["entry.941208881"]: "Yes, I understand.",
+    ["entry.330888046"]: "Yes, I understand.",
+    ["emailAddress"]: email
+    // entry.1464206896_sentinel: 
+    // entry.1351260288_sentinel: 
+    // entry.1840918119_sentinel: 
+    // entry.472021917_sentinel: 
+    // entry.1296804660_sentinel: 
+    // entry.1655462793_sentinel: 
+    // entry.941208881_sentinel: 
+    
+    
+  }
+
   let formData, postEndpoint;
-  if (formType === "test") {
+  if (userType === "test") {
     formData = qs.stringify(testForm);
     postEndpoint = `https://docs.google.com/forms/u/0/d/e/1FAIpQLSeFUYvoZykDfxUPPsmEWgfJWa9WLXgcZ356xFs5ZoFwGsj7ng/formResponse`;
-  } else {
+  } else if (userType === "team") {
+    formData = qs.stringify(teamForm)
+    postEndpoint = `https://docs.google.com/forms/u/2/d/e/1FAIpQLSfbZvKMyMlY6IdCDmn_wCN6aS0bjgvbrNR7Qe_4QDiLV1-7lw/formResponse`
+  } else if (userType==="student") {
     formData = qs.stringify(studentForm);
     postEndpoint = `https://docs.google.com/forms/u/2/d/e/1FAIpQLSfviLd5-9633aKQBAeVIS58rr0WCEO8irhjLYFHYgGBsN49iQ/formResponse`;
   }
   return axios
     .post(postEndpoint, formData)
     .then((_) => {
-      console.log(`Successfully submitted the ${formType} form for ${full_name}!`)
+      console.log(`Successfully submitted the ${userType} form for ${full_name}!`)
       // Update student's last declared only if the actual GA form was submitted
-      if (formType === "student") {
+      if (userType !== "test" ) {
         user.last_declared = date;
         user.save();
         console.log(`Updated last declared status for ${full_name}`);

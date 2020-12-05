@@ -21,12 +21,10 @@ export default function Copyright() {
       <Link href="#" onClick={() => setOpen(true)} color="primary">
         FAQ
       </Link>
-      <div>
       <FAQModal
       open={open}
       onClose={() => setOpen(false)}
       />
-      </div>
     </Typography>
   );
 }

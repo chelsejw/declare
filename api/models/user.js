@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
   active: { type: Boolean, default: true }, // determines if server will automatically send requests,
   mobile: {type: String, required: true},
   cohort: {type: String, required: true},
+  user_type: {type: String, enum: ['student', 'team'], required: true }, 
   last_declared: Date,
   password:  { type: String, required: true },
   created_at: {
