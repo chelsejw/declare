@@ -1,9 +1,9 @@
 const qs = require("qs");
 const axios = require("axios");
 
-const createPostRequest = (formType, user) => {
+const createPostRequest = (userType, user) => {
   const { email, ga_email, mobile, full_name } = user;
-  console.log(`Creating post request to the ${formType} form for ${full_name}`);
+  console.log(`Creating post request to the ${userType} form for ${full_name}`);
   const date = new Date();
   const currentDay = date.getDate();
   const currentMonth = date.getMonth() + 1;
@@ -92,21 +92,22 @@ const createPostRequest = (formType, user) => {
   }
 
   let formData, postEndpoint;
-  if (formType === "test") {
+  if (userType === "test") {
     formData = qs.stringify(testForm);
     postEndpoint = `https://docs.google.com/forms/u/0/d/e/1FAIpQLSeFUYvoZykDfxUPPsmEWgfJWa9WLXgcZ356xFs5ZoFwGsj7ng/formResponse`;
-  } else if (formType === "team") {
+  } else if (userType === "team") {
+    formData = qs.stringify(teamForm)
     postEndpoint = `https://docs.google.com/forms/u/2/d/e/1FAIpQLSfbZvKMyMlY6IdCDmn_wCN6aS0bjgvbrNR7Qe_4QDiLV1-7lw/formResponse`
-  } else if (formType==="student") {
+  } else if (userType==="student") {
     formData = qs.stringify(studentForm);
     postEndpoint = `https://docs.google.com/forms/u/2/d/e/1FAIpQLSfviLd5-9633aKQBAeVIS58rr0WCEO8irhjLYFHYgGBsN49iQ/formResponse`;
   }
   return axios
     .post(postEndpoint, formData)
     .then((_) => {
-      console.log(`Successfully submitted the ${formType} form for ${full_name}!`)
+      console.log(`Successfully submitted the ${userType} form for ${full_name}!`)
       // Update student's last declared only if the actual GA form was submitted
-      if (formType !== "test" ) {
+      if (userType !== "test" ) {
         user.last_declared = date;
         user.save();
         console.log(`Updated last declared status for ${full_name}`);
