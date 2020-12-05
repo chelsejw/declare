@@ -10,10 +10,10 @@ export default function Register({
   classes
 }) {
   const { getCohortList } = requests;
-  const [cohorts, setCohorts] = useState([]);
+  const [cohorts, setCohorts] = useState(["SEIF 3"]);
 
-  let cohortItems = cohorts.map((name) => {
-    return <MenuItem value={name}>{name}</MenuItem>;
+  let cohortItems = cohorts.map((name, index) => {
+    return <MenuItem key={index} value={name}>{name}</MenuItem>;
   });
 
   useEffect(() => {
@@ -30,7 +30,8 @@ export default function Register({
     ga_email: GAEmailErrors,
     mobile: mobileErrors,
     full_name: fullNameErrors,
-    cohort: cohortErrors
+    cohort: cohortErrors,
+    user_type: userTypeErrors
   } = errors;
   return (
     <div>
@@ -114,14 +115,12 @@ export default function Register({
           Cohort Name
         </InputLabel>{" "}
         <Select
-          // variant="outlined"
           labelId="cohortLabel"
           id="cohort"
           className={classes.selectEmpty}
           displayEmpty
           fullWidth
           name="cohort"
-          // label="cohort name"
           value={inputs.cohort}
           placeholder="Cohort Name"
           onChange={(e) => handleInputChange(e)}
@@ -130,6 +129,34 @@ export default function Register({
         </Select>
         {cohortErrors.length > 0 && (
           <FormHelperText>{renderErrors(cohortErrors)}</FormHelperText>
+        )}
+      </FormControl>
+      <FormControl
+        className={classes.formControl}
+        error={userTypeErrors.length > 0}
+      >
+        <InputLabel shrink id="user_typeLabel">
+          User Type
+        </InputLabel>{" "}
+        <Select
+          // variant="outlined"
+          labelId="user_typeLabel"
+          id="user_type"
+          className={classes.selectEmpty}
+          displayEmpty
+          fullWidth
+          name="user_type"
+          // label="cohort name"
+          value={inputs.user_type}
+          placeholder="User Type"
+          onChange={(e) => handleInputChange(e)}
+        >
+          <MenuItem value="student">Student</MenuItem>;
+          <MenuItem value="team">GA Team</MenuItem>;
+
+        </Select>
+        {userTypeErrors.length > 0 && (
+          <FormHelperText>{renderErrors(userTypeErrors)}</FormHelperText>
         )}
       </FormControl>
     </div>

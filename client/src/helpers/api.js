@@ -13,25 +13,27 @@ const requests = {
     });
   },
 
-  register: ({ email, password, full_name, ga_email, mobile, cohort }) => {
+  register: ({ email, password, full_name, ga_email, mobile, cohort, user_type }) => {
     return axios.post(`${API_URL}/register`, {
       email,
       full_name,
       password,
       ga_email,
       mobile,
-      cohort
+      cohort,
+      user_type
     });
   },
 
-  update: ({ email, full_name, ga_email, active, mobile, cohort }) => {
+  update: ({ email, full_name, ga_email, active, mobile, cohort, user_type }) => {
     return axios.patch(`${API_URL}/update`, {
       email,
       full_name,
       ga_email,
       active,
       mobile,
-      cohort
+      cohort,
+      user_type
     });
   },
 

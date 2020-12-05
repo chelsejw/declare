@@ -48,6 +48,7 @@ export default function Form ({errors, classes, stage, inputs, handleInputChange
           renderErrors={renderErrors}
         />
       )}
+      
 
       {(stage === REGISTER || stage === AUTHENTICATED || stage === UPDATED) && (
         <Register
