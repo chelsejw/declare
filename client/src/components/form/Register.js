@@ -19,7 +19,7 @@ export default function Register({
   const { getCohortList } = requests
   const [cohorts, setCohorts] = useState(['SEIF 3'])
 
-  let cohortItems = cohorts.map((name, index) => {
+  const cohortItems = cohorts.map((name, index) => {
     return (
       <MenuItem key={index} value={name}>
         {name}

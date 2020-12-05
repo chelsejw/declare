@@ -1,9 +1,10 @@
 import React from 'react'
 import { Grid, TextField, Button } from '@material-ui/core'
+import ScaleLoader from 'react-spinners/ScaleLoader'
+
 import Register from './Register'
 import ActiveSwitch from './ActiveSwitch'
 import Login from './Login'
-import ScaleLoader from 'react-spinners/ScaleLoader'
 import {
   CHECK_EMAIL,
   UPDATED,
@@ -51,7 +52,7 @@ export default function Form({
           id="email"
           label="Email Address"
           name="email"
-          disabled={stage !== CHECK_EMAIL ? true : false}
+          disabled={stage !== CHECK_EMAIL}
           autoComplete="email"
           autoFocus
           value={inputs.email}
@@ -113,7 +114,6 @@ export default function Form({
               updateUser()
               break
             default:
-              return
           }
         }}
       >

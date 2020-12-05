@@ -1,18 +1,18 @@
-import { CHECK_EMAIL } from "../constants";
+import { CHECK_EMAIL } from '../constants'
 
 const defaultStates = {
   inputs: {
-    email: "",
-    password: "",
-    ga_email: "",
-    full_name: "",
+    email: '',
+    password: '',
+    ga_email: '',
+    full_name: '',
     active: false,
-    mobile: "",
-    cohort: "",
-    user_type: ""
+    mobile: '',
+    cohort: '',
+    user_type: '',
   },
   message:
-    "If you are registered, you will be prompted to login. If not, you will be prompted to register.",
+    'If you are registered, you will be prompted to login. If not, you will be prompted to register.',
   stage: CHECK_EMAIL,
   errors: {
     ga_email: [],
@@ -24,9 +24,9 @@ const defaultStates = {
     user_type: [],
   },
   buttonText: CHECK_EMAIL,
-  user: { email: "" },
+  user: { email: '' },
   loading: false,
   profileChanged: false,
-};
+}
 
-export default defaultStates;
+export default defaultStates

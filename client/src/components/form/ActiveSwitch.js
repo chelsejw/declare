@@ -2,6 +2,7 @@ import React from 'react'
 import { Grid, Typography, Box } from '@material-ui/core'
 import Switch from '@material-ui/core/Switch'
 import moment from 'moment'
+
 export default function ActiveSwitch({
   inputs,
   handleInputChange,
@@ -20,7 +21,7 @@ export default function ActiveSwitch({
             <Switch
               onChange={(e) => handleInputChange(e)}
               name="active"
-              checked={inputs.active ? true : false}
+              checked={inputs.active}
               inputProps={{ 'aria-label': 'secondary checkbox' }}
             />
           </Grid>
