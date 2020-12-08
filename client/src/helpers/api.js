@@ -54,6 +54,7 @@ const requests = {
   },
 
   getScheduledTime: () => {
+    console.log(`${API_URL}/scheduled`)
     return axios.get(`${API_URL}/scheduled`)
   },
 
