@@ -5,7 +5,7 @@ An app to automatically send the GA declaration form every week at a specified t
 ## Notable Technologies: Backend
 
 - Express
-- Heroku with Scheduler Add-on (runs `api/jobs/sendGoogleForm.js` every day)
+- Heroku with Scheduler Add-on (runs `api/jobs/sendGoogleForm.js` every day. Due to Heroku scheduler restrictions which won't let me run jobs for a particular day of a week, this job runs everyday, but the script checks for the current date to see if it should run the job.)
 
 ## Notable Technologies: Frontend
 
@@ -63,3 +63,8 @@ For client, just `yarn start`
 ✅ Add compatibility for Team declaration forms
 
 ❗️ Notify user via email for every declaration submitted? (Users should be able to turn on/off the feature. Or they can enable emails only when the service fails.)
+
+## Known Issues
+
+❗️ Sometimes, user's last declared field does not update although forms were sent – believe it's an async problem where the process exited before Mongoose completed saving the changes to the user model. Tried to resolve it with async/await.
+
