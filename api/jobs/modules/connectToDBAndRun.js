@@ -1,5 +1,5 @@
 require('dotenv').config()
-const ENV = process.env
+const ENV = process.env // Won't use destructuring here in case user's db_host/pass/user is not in .env
 const mongoose = require('mongoose')
 const localMongo = `mongodb://localhost:27017/${ENV.DB_NAME}`
 const mongoAtlas = `mongodb+srv://${ENV.DB_USER}:${ENV.DB_PASS}@${ENV.DB_HOST}/${ENV.DB_NAME}`

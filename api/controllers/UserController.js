@@ -1,5 +1,5 @@
 require('dotenv').config()
-const ENV = process.env
+const { SCHEDULED_DAY, SCHEDULED_TIME_IN_HOURS } = process.env
 const User = require('../models/user')
 const argon2 = require('argon2')
 const dayOfWeekAsString = require('../jobs/modules/dayOfWeekAsString')
@@ -156,13 +156,13 @@ const controllers = {
       })
   },
 
-  getScheduledTime: (req, res) => {
+  getScheduledTime: (_, res) => {
     // let cronTime = process.env.SCHEDULED_TIME_TO_RUN.split(" ");
-    let hour = ENV.SCHEDULED_TIME_IN_HOURS
+    let hour = SCHEDULED_TIME_IN_HOURS
     if (hour.toString().length < 2) {
       hour = '0' + hour
     }
-    const day = dayOfWeekAsString(ENV.SCHEDULED_DAY) // day of the week is the fifth number in the cron string
+    const day = dayOfWeekAsString(SCHEDULED_DAY) // day of the week is the fifth number in the cron string
     res.send(`${day}, ${hour}:00 hrs`)
   },
 }

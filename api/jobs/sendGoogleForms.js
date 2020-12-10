@@ -1,11 +1,11 @@
 require('dotenv').config()
-const ENV = process.env
+const { SCHEDULED_DAY } = process.env
+
 const CreatePostRequest = require('./modules/createPostRequest')
 const callRequestInBatches = require('./modules/callRequestInBatches')
 const connectToDBAndRun = require('./modules/connectToDBAndRun')
 const UserModel = require('../models/user')
 // const ENVIRONMENT = ENV.NODE_ENV;
-const SCHEDULED_DAY = ENV.SCHEDULED_DAY
 const dayOfWeekAsString = require('./modules/dayOfWeekAsString')
 
 const sendGoogleForms = async () => {
