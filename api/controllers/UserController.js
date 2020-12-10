@@ -1,100 +1,142 @@
-require("dotenv").config();
-const ENV = process.env;
-const User = require("../models/user");
-const argon2 = require("argon2");
+require('dotenv').config()
+const ENV = process.env
+const User = require('../models/user')
+const argon2 = require('argon2')
 const dayOfWeekAsString = require('../jobs/modules/dayOfWeekAsString')
 const errorHandler = (res, errData, message) => {
-  let response = {};
-  console.error(errData);
-  response.message = message;
-  res.status(500);
-  response.error = true;
-  res.json(response);
-};
+  let response = {}
+  console.error(errData)
+  response.message = message
+  res.status(500)
+  response.error = true
+  res.json(response)
+}
 
 const setResponse = (res, errorExists, message, userData, existsField) => {
-  let response = {};
-  response.error = errorExists;
-  response.message = message;
+  let response = {}
+  response.error = errorExists
+  response.message = message
   if (userData) {
-    response.user = userData;
+    response.user = userData
   }
   if (existsField) {
     // This is only for checkIfUserExists route
-    response.exists = existsField;
+    response.exists = existsField
   }
-  res.json(response);
-};
+  res.json(response)
+}
 
 const controllers = {
   register: async (req, res) => {
     // Check if user exists.
-    const { email, password } = req.body;
+    const { email, password } = req.body
     if (await User.findOne({ email })) {
-      setResponse(res, true, "Email is already in use.");
-      return;
+      setResponse(res, true, 'Email is already in use.')
+      return
     }
 
-    let argon2Hash;
+    let argon2Hash
 
     try {
-      argon2Hash = await argon2.hash(password);
+      argon2Hash = await argon2.hash(password)
     } catch (err) {
-      errorHandler(res, err, "There was an unexpected system error.");
+      errorHandler(res, err, 'There was an unexpected system error.')
     }
 
     try {
-      const newUser = await User.create({ ...req.body, password: argon2Hash });
+      const newUser = await User.create({ ...req.body, password: argon2Hash })
 
       console.log(newUser)
 
-      let { ga_email, full_name, active, mobile, last_declared, cohort, user_type  } = newUser;
-      let userDataToSend = { ga_email, full_name, active, mobile, email: newUser.email, last_declared, cohort, user_type };
-      setResponse(res, false, "User was created successfully.", userDataToSend);
+      let {
+        ga_email,
+        full_name,
+        active,
+        mobile,
+        last_declared,
+        cohort,
+        user_type,
+      } = newUser
+      let userDataToSend = {
+        ga_email,
+        full_name,
+        active,
+        mobile,
+        email: newUser.email,
+        last_declared,
+        cohort,
+        user_type,
+      }
+      setResponse(res, false, 'User was created successfully.', userDataToSend)
     } catch (err) {
-      errorHandler(res, err, "There was an unexpected system error.");
+      errorHandler(res, err, 'There was an unexpected system error.')
     }
   },
 
   login: async (req, res) => {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    const { email, password } = req.body
+    const user = await User.findOne({ email })
     if (!user) {
-      setResponse(res, true, "No user with that email found.");
+      setResponse(res, true, 'No user with that email found.')
     }
     try {
-      const passwordVerified = await argon2.verify(user.password, password);
+      const passwordVerified = await argon2.verify(user.password, password)
       if (passwordVerified) {
-        let { ga_email, full_name, active, mobile, last_declared, cohort, user_type } = user;
-        setResponse(res, false, "Login successful.", { email: user.email, ga_email, full_name, active, mobile, last_declared , cohort, user_type});
+        let {
+          ga_email,
+          full_name,
+          active,
+          mobile,
+          last_declared,
+          cohort,
+          user_type,
+        } = user
+        setResponse(res, false, 'Login successful.', {
+          email: user.email,
+          ga_email,
+          full_name,
+          active,
+          mobile,
+          last_declared,
+          cohort,
+          user_type,
+        })
       } else {
-        setResponse(res, true, "Password is incorrect.");
+        setResponse(res, true, 'Password is incorrect.')
       }
     } catch (err) {
-      errorHandler(res, err, "There was an unexpected system error.");
+      errorHandler(res, err, 'There was an unexpected system error.')
     }
   },
 
   checkIfUserExists: async (req, res) => {
-    const { email } = req.body;
+    const { email } = req.body
     try {
       if (await User.findOne({ email })) {
-        setResponse(res, false, "This user exists.", null, true);
-        return;
+        setResponse(res, false, 'This user exists.', null, true)
+        return
       } else {
-        setResponse(res, false, "The user does not exist.", null, false);
+        setResponse(res, false, 'The user does not exist.', null, false)
       }
     } catch (err) {
-      errorHandler(res, err, "There was an unexpected system error.");
+      errorHandler(res, err, 'There was an unexpected system error.')
     }
   },
 
   updateUser: async (req, res) => {
-    let { email, ga_email, full_name, active, mobile, cohort, user_type } = req.body;
+    let {
+      email,
+      ga_email,
+      full_name,
+      active,
+      mobile,
+      cohort,
+      user_type,
+    } = req.body
     User.findOneAndUpdate(
       { email },
       { ga_email, full_name, active, mobile, cohort, user_type },
-      { new: true } // returns the updated document
+      { new: true }, // returns the updated document
     )
       .then((updatedUser) => {
         let userDataToSend = {
@@ -105,24 +147,24 @@ const controllers = {
           mobile: updatedUser.mobile,
           last_declared: updatedUser.last_declared,
           cohort: updatedUser.cohort,
-          user_type: updatedUser.user_type
+          user_type: updatedUser.user_type,
         }
-        setResponse(res, false, "Update was successful.", userDataToSend);
+        setResponse(res, false, 'Update was successful.', userDataToSend)
       })
       .catch((err) => {
-        errorHandler(res, err, "There was an unexpected system error.");
-      });
+        errorHandler(res, err, 'There was an unexpected system error.')
+      })
   },
 
   getScheduledTime: (req, res) => {
     // let cronTime = process.env.SCHEDULED_TIME_TO_RUN.split(" ");
-    let hour = ENV.SCHEDULED_TIME_IN_HOURS;
+    let hour = ENV.SCHEDULED_TIME_IN_HOURS
     if (hour.toString().length < 2) {
-      hour = "0" + hour;
+      hour = '0' + hour
     }
-    const day = dayOfWeekAsString(ENV.SCHEDULED_DAY); // day of the week is the fifth number in the cron string
-    res.send(`${day}, ${hour}:00 hrs`);
-  }
-};
+    const day = dayOfWeekAsString(ENV.SCHEDULED_DAY) // day of the week is the fifth number in the cron string
+    res.send(`${day}, ${hour}:00 hrs`)
+  },
+}
 
-module.exports = controllers;
+module.exports = controllers

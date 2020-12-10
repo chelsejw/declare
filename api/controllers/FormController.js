@@ -1,7 +1,7 @@
-const cohortsArray = require('../models/cohorts');
+const cohortsArray = require('../models/cohorts')
 
 module.exports = {
-  getCohorts: (req, res) => {
-    res.json(cohortsArray);
-  }
+  getCohorts: (_, res) => {
+    res.json(cohortsArray)
+  },
 }
