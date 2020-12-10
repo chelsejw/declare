@@ -163,7 +163,7 @@ const controllers = {
       hour = '0' + hour
     }
     const day = dayOfWeekAsString(SCHEDULED_DAY) // day of the week is the fifth number in the cron string
-    res.send(`${day}, ${hour}:00 hrs`)
+    res.send(`${day}`)
   },
 }
 
