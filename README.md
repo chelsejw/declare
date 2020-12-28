@@ -68,3 +68,4 @@ For client, just `yarn start`
 
 ❗️ Sometimes, user's last declared field does not update although forms were sent – my theory is that it's an async problem where the connection to the database closed before Mongoose completed saving the changes to the user model. Tried to resolve it with async/await.
 
+❗️ Requests for the *team* form has stopped working. Unable to figure out the issue.
