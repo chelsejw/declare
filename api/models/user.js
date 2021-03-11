@@ -20,6 +20,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     default: Date.now,
   },
+  send_day: { type: String, required: true }
 })
 
 const UserModel = mongoose.model('User', userSchema)
