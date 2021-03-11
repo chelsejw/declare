@@ -10,15 +10,9 @@ const dayOfWeekAsString = require('./modules/dayOfWeekAsString')
 
 const sendGoogleForms = async () => {
   const dayOfWeekAsIndex = new Date().getDay().toString()
-  console.log(
-    `The app should run tasks every ${dayOfWeekAsString(SCHEDULED_DAY)}.`,
-  )
+  const currentDayString = dayOfWeekAsString(dayOfWeekAsIndex);
   console.log(`Today is ${dayOfWeekAsString(dayOfWeekAsIndex)}.`)
-  if (dayOfWeekAsIndex !== SCHEDULED_DAY) {
-    console.log(`We are not scheduled to send a form today.`)
-    return
-  }
-  const activeUsers = await UserModel.find({ active: true })
+  const activeUsers = await UserModel.find({ active: true, send_day: currentDayString })
   const allPostRequests = activeUsers.map((user) => {
     // Create the post request to submit the form for each active user.
     return CreatePostRequest(
