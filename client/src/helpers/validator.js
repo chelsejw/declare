@@ -71,7 +71,7 @@ export default function formValidator(inputTypes, inputs) {
       const { user_type } = inputs
       errors.user_type = []
       if (user_type === '') {
-        errors.user_type.push('Please select a cohort.')
+        errors.user_type.push('Please select the user type.')
         isValid = false
       }
     }

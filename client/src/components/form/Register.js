@@ -54,6 +54,7 @@ export default function Register({
     cohort: cohortErrors,
     user_type: userTypeErrors,
   } = errors
+
   return (
     <div>
       <TextField
@@ -185,13 +186,14 @@ export default function Register({
           labelId="send_dayLabel"
           id="send_day"
           className={classes.selectEmpty}
-          displayEmpty
           fullWidth
           name="send_day"
           value={inputs.send_day}
           placeholder="Send Day"
           onChange={(e) => handleInputChange(e)}
+          displayEmpty
         >
+          <MenuItem value="">N/A: Defaults to {scheduledTime}</MenuItem>
           {dayOptions}
         </Select>
       </FormControl>
