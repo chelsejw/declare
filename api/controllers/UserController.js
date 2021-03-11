@@ -138,7 +138,7 @@ const controllers = {
       user_type,
       send_day,
     } = req.body
-    User.findOneAndUpdate(
+    User.updateOne(
       { email },
       { ga_email, full_name, active, mobile, cohort, user_type, send_day },
       { new: true }, // returns the updated document
