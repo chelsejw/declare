@@ -162,7 +162,10 @@ export default function App() {
   }
 
   const updateUser = () => {
-    const form = formValidator('ga_email, mobile, full_name, cohort', inputs)
+    const form = formValidator(
+      'ga_email, mobile, full_name, cohort, user_type, send_day',
+      inputs,
+    )
     setErrors((prev) => ({ ...prev, ...form.errors }))
     if (!form.isValid) return
     setLoading(true)
@@ -181,7 +184,7 @@ export default function App() {
 
   const registerUser = () => {
     const form = formValidator(
-      'ga_email, password, mobile, full_name, cohort',
+      'ga_email, password, mobile, full_name, cohort, user_type, send_day',
       inputs,
     )
     setErrors((prev) => ({ ...prev, ...form.errors }))

@@ -8,6 +8,7 @@ import {
   FormHelperText,
 } from '@material-ui/core'
 import requests from '../../helpers/api'
+import { DAY } from '../../constants'
 
 export default function Register({
   inputs,
@@ -37,12 +38,21 @@ export default function Register({
       })
   }, [])
 
+  const dayOptions = Object.entries(DAY).map((k) => {
+    return (
+      <MenuItem key={k[0]} value={k[1]}>
+        {k[1]}
+      </MenuItem>
+    )
+  })
+
   const {
     ga_email: GAEmailErrors,
     mobile: mobileErrors,
     full_name: fullNameErrors,
     cohort: cohortErrors,
     user_type: userTypeErrors,
+    send_day: sendDayErrors,
   } = errors
   return (
     <div>
@@ -150,14 +160,12 @@ export default function Register({
           User Type
         </InputLabel>{' '}
         <Select
-          // variant="outlined"
           labelId="user_typeLabel"
           id="user_type"
           className={classes.selectEmpty}
           displayEmpty
           fullWidth
           name="user_type"
-          // label="cohort name"
           value={inputs.user_type}
           placeholder="User Type"
           onChange={(e) => handleInputChange(e)}
@@ -167,6 +175,30 @@ export default function Register({
         </Select>
         {userTypeErrors.length > 0 && (
           <FormHelperText>{renderErrors(userTypeErrors)}</FormHelperText>
+        )}
+      </FormControl>
+      <FormControl
+        className={classes.formControl}
+        error={sendDayErrors.length > 0}
+      >
+        <InputLabel shrink id="user_sendDay">
+          Day to Send
+        </InputLabel>{' '}
+        <Select
+          labelId="send_dayLabel"
+          id="send_day"
+          className={classes.selectEmpty}
+          displayEmpty
+          fullWidth
+          name="send_day"
+          value={inputs.send_day}
+          placeholder="Send Day"
+          onChange={(e) => handleInputChange(e)}
+        >
+          {dayOptions}
+        </Select>
+        {sendDayErrors.length > 0 && (
+          <FormHelperText>{renderErrors(sendDayErrors)}</FormHelperText>
         )}
       </FormControl>
     </div>

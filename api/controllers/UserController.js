@@ -56,6 +56,7 @@ const controllers = {
         last_declared,
         cohort,
         user_type,
+        send_day,
       } = newUser
       let userDataToSend = {
         ga_email,
@@ -66,6 +67,7 @@ const controllers = {
         last_declared,
         cohort,
         user_type,
+        send_day,
       }
       setResponse(res, false, 'User was created successfully.', userDataToSend)
     } catch (err) {
@@ -90,6 +92,7 @@ const controllers = {
           last_declared,
           cohort,
           user_type,
+          send_day,
         } = user
         setResponse(res, false, 'Login successful.', {
           email: user.email,
@@ -100,6 +103,7 @@ const controllers = {
           last_declared,
           cohort,
           user_type,
+          send_day,
         })
       } else {
         setResponse(res, true, 'Password is incorrect.')
@@ -132,10 +136,11 @@ const controllers = {
       mobile,
       cohort,
       user_type,
+      send_day,
     } = req.body
     User.findOneAndUpdate(
       { email },
-      { ga_email, full_name, active, mobile, cohort, user_type },
+      { ga_email, full_name, active, mobile, cohort, user_type, send_day },
       { new: true }, // returns the updated document
     )
       .then((updatedUser) => {
@@ -148,6 +153,7 @@ const controllers = {
           last_declared: updatedUser.last_declared,
           cohort: updatedUser.cohort,
           user_type: updatedUser.user_type,
+          send_day: updatedUser.send_day,
         }
         setResponse(res, false, 'Update was successful.', userDataToSend)
       })

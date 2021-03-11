@@ -6,11 +6,11 @@ export const LOGIN = 'login'
 export const REGISTER = 'register'
 export const API_URL = process.env.REACT_APP_API_URL
 export const DAY = {
-    MON: "Monday",
-    TUE: "Tuesday",
-    WED: "Wednesday",
-    THU: "Thursday",
-    FRI: "Friday",
-    SAT: "Saturday",
-    SUN: "Sunday"
+  MON: 'Monday',
+  TUE: 'Tuesday',
+  WED: 'Wednesday',
+  THU: 'Thursday',
+  FRI: 'Friday',
+  SAT: 'Saturday',
+  SUN: 'Sunday',
 }

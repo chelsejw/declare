@@ -21,6 +21,7 @@ const requests = {
     mobile,
     cohort,
     user_type,
+    send_day,
   }) => {
     return axios.post(`${API_URL}/register`, {
       email,
@@ -30,6 +31,7 @@ const requests = {
       mobile,
       cohort,
       user_type,
+      send_day,
     })
   },
 
@@ -41,6 +43,7 @@ const requests = {
     mobile,
     cohort,
     user_type,
+    send_day,
   }) => {
     return axios.patch(`${API_URL}/update`, {
       email,
@@ -50,6 +53,7 @@ const requests = {
       mobile,
       cohort,
       user_type,
+      send_day,
     })
   },
 

@@ -10,6 +10,7 @@ const defaultStates = {
     mobile: '',
     cohort: '',
     user_type: '',
+    send_day: '',
   },
   message:
     'If you are registered, you will be prompted to login. If not, you will be prompted to register.',
@@ -22,6 +23,7 @@ const defaultStates = {
     password: [],
     cohort: [],
     user_type: [],
+    send_day: [],
   },
   buttonText: CHECK_EMAIL,
   user: { email: '' },
