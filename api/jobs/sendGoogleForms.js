@@ -17,6 +17,9 @@ const sendGoogleForms = async () => {
 
   if (currentDay == scheduledDay) {
     // If it's the scheduled day, we send it for users who have no configured send_day, or whose send_day is the scheduled day.
+    console.log(
+      `It is the scheduled day. Sending for users whose send_day is ${scheduledDay} or N/A.`,
+    )
     usersToSend = await UserModel.find({
       active: true,
       send_day: { $in: ['', scheduledDay] },
