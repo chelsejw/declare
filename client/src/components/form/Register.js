@@ -180,7 +180,8 @@ export default function Register({
       </FormControl>
       <FormControl className={classes.formControl}>
         <InputLabel shrink id="user_sendDay">
-          Day to Send (Optional: If empty, we'll send it every {scheduledTime}.)
+          Day to Send (Optional: If set to N/A, we'll send it every{' '}
+          {scheduledTime}.)
         </InputLabel>{' '}
         <Select
           labelId="send_dayLabel"
