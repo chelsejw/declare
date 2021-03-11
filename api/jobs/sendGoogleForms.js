@@ -10,10 +10,26 @@ const dayOfWeekAsString = require('./modules/dayOfWeekAsString')
 
 const sendGoogleForms = async () => {
   const dayOfWeekAsIndex = new Date().getDay().toString()
-  const currentDayString = dayOfWeekAsString(dayOfWeekAsIndex);
+  const currentDayString = dayOfWeekAsString(dayOfWeekAsIndex)
   console.log(`Today is ${dayOfWeekAsString(dayOfWeekAsIndex)}.`)
-  const activeUsers = await UserModel.find({ active: true, send_day: currentDayString })
-  const allPostRequests = activeUsers.map((user) => {
+
+  let usersToSend
+
+  if (currentDayString == SCHEDULED_DAY) {
+    // If it's the scheduled day, we send it for users who have no configured send_day, or whose send_day is the scheduled day.
+    usersToSend = UserModel.find({
+      active: true,
+      send_day: { $in: [null, SCHEDULED_DAY] },
+    })
+  } else {
+    // If it's a non-scheduled day, we send it for users who have customised their send_day to the current day.
+    usersToSend = await UserModel.find({
+      active: true,
+      send_day: currentDayString,
+    })
+  }
+
+  const allPostRequests = usersToSend.map((user) => {
     // Create the post request to submit the form for each active user.
     return CreatePostRequest(
       user.user_type, // Should be "team" or "student", determines which form will be sent
