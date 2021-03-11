@@ -1,6 +1,5 @@
 export default function formValidator(inputTypes, inputs) {
   const types = inputTypes.split(', ')
-  // console.log(`Validating ${types}`);
   const errors = {}
   let isValid = true
   types.forEach((type) => {
@@ -68,6 +67,23 @@ export default function formValidator(inputTypes, inputs) {
         isValid = false
       }
     }
+    if (type === 'user_type') {
+      const { user_type } = inputs
+      errors.user_type = []
+      if (user_type === '') {
+        errors.user_type.push('Please select the user type.')
+        isValid = false
+      }
+    }
+
+    // if (type === 'send_day') {
+    //   const { send_day } = inputs
+    //   errors.send_day = []
+    //   if (send_day === '') {
+    //     errors.send_day.push('Please select a day to send your declaration.')
+    //     isValid = false
+    //   }
+    // }
   })
 
   return { isValid, errors }

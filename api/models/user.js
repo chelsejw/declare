@@ -20,6 +20,20 @@ const userSchema = new mongoose.Schema({
     required: true,
     default: Date.now,
   },
+  send_day: {
+    type: String,
+    enum: [
+      '',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday',
+    ],
+    default: '',
+  },
 })
 
 const UserModel = mongoose.model('User', userSchema)

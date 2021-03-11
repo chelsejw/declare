@@ -1,24 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Typography, Box, Link, CircularProgress } from '@material-ui/core'
-import requests from '../helpers/api'
 
-export default function Welcome() {
-  const { getScheduledTime } = requests
-  const [loadingScheduledTime, setLoadingScheduledTime] = useState(true)
-  const [scheduledTime, setScheduledTime] = useState('')
-  useEffect(() => {
-    getScheduledTime()
-      .then(({ data }) => {
-        setScheduledTime(data)
-        setLoadingScheduledTime(false)
-      })
-      .catch((err) => {
-        console.error(err)
-        setLoadingScheduledTime(false)
-        setScheduledTime('Error getting scheduled time from server.')
-      })
-  }, [])
-
+export default function Welcome({ loadingScheduledTime, scheduledTime }) {
   return (
     <div>
       <Box mb={2}>

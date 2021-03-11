@@ -2,6 +2,22 @@
 
 An app to automatically send the GA declaration form every week at a specified time, for the subscribed users.
 
+## ⭐️ NEW! Features (V1.1) 11 March, 2021 
+
+- Allow user to configure the day they want their all-clear forms sent.
+
+## Features (V1.0)
+
+- Students and GA team can send all-clear declaration forms every week.
+
+## Features in Consideration
+- Allow users to customise form fields (so these will be forms that are not all-clear)
+- Notify user via email for every declaration submitted? (Users should be able to turn on/off the feature. Or they can enable emails only when the service fails.)
+
+---
+
+## For Developers:
+
 ## Notable Technologies: Backend
 
 - Express
@@ -48,21 +64,6 @@ For `api` you can use `yarn dev` if you have `nodemon` installed, if not `yarn s
 
 For client, just `yarn start`
 
-## Features
-
-✅ Setup frontend for basic authentication & CRUD (without sessions/cookies/JWT)
-
-✅ Setup backend for CRUD (is delete necessary?)
-
-✅ Setup backend to send forms periodically
-
-✅ Validation for frontend input
-
-✅ Users can choose cohort name
-
-✅ Add compatibility for Team declaration forms
-
-❗️ Notify user via email for every declaration submitted? (Users should be able to turn on/off the feature. Or they can enable emails only when the service fails.)
 
 ## Known Issues
 

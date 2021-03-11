@@ -8,6 +8,7 @@ import {
   FormHelperText,
 } from '@material-ui/core'
 import requests from '../../helpers/api'
+import { DAY } from '../../constants'
 
 export default function Register({
   inputs,
@@ -15,6 +16,7 @@ export default function Register({
   errors,
   renderErrors,
   classes,
+  scheduledTime,
 }) {
   const { getCohortList } = requests
   const [cohorts, setCohorts] = useState(['SEIF 3'])
@@ -37,6 +39,14 @@ export default function Register({
       })
   }, [])
 
+  const dayOptions = Object.entries(DAY).map((k) => {
+    return (
+      <MenuItem key={k[0]} value={k[1]}>
+        {k[1]}
+      </MenuItem>
+    )
+  })
+
   const {
     ga_email: GAEmailErrors,
     mobile: mobileErrors,
@@ -44,6 +54,7 @@ export default function Register({
     cohort: cohortErrors,
     user_type: userTypeErrors,
   } = errors
+
   return (
     <div>
       <TextField
@@ -150,14 +161,12 @@ export default function Register({
           User Type
         </InputLabel>{' '}
         <Select
-          // variant="outlined"
           labelId="user_typeLabel"
           id="user_type"
           className={classes.selectEmpty}
           displayEmpty
           fullWidth
           name="user_type"
-          // label="cohort name"
           value={inputs.user_type}
           placeholder="User Type"
           onChange={(e) => handleInputChange(e)}
@@ -168,6 +177,26 @@ export default function Register({
         {userTypeErrors.length > 0 && (
           <FormHelperText>{renderErrors(userTypeErrors)}</FormHelperText>
         )}
+      </FormControl>
+      <FormControl className={classes.formControl}>
+        <InputLabel shrink id="user_sendDay">
+          Day to Send (Optional: If set to N/A, we'll send it every{' '}
+          {scheduledTime}.)
+        </InputLabel>{' '}
+        <Select
+          labelId="send_dayLabel"
+          id="send_day"
+          className={classes.selectEmpty}
+          fullWidth
+          name="send_day"
+          value={inputs.send_day}
+          placeholder="Send Day"
+          onChange={(e) => handleInputChange(e)}
+          displayEmpty
+        >
+          <MenuItem value="">N/A: Defaults to {scheduledTime}</MenuItem>
+          {dayOptions}
+        </Select>
       </FormControl>
     </div>
   )

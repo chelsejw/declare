@@ -162,7 +162,10 @@ export default function App() {
   }
 
   const updateUser = () => {
-    const form = formValidator('ga_email, mobile, full_name, cohort', inputs)
+    const form = formValidator(
+      'ga_email, mobile, full_name, cohort, user_type, send_day',
+      inputs,
+    )
     setErrors((prev) => ({ ...prev, ...form.errors }))
     if (!form.isValid) return
     setLoading(true)
@@ -181,7 +184,7 @@ export default function App() {
 
   const registerUser = () => {
     const form = formValidator(
-      'ga_email, password, mobile, full_name, cohort',
+      'ga_email, password, mobile, full_name, cohort, user_type, send_day',
       inputs,
     )
     setErrors((prev) => ({ ...prev, ...form.errors }))
@@ -199,6 +202,22 @@ export default function App() {
         )
       })
   }
+
+  const { getScheduledTime } = requests
+  const [loadingScheduledTime, setLoadingScheduledTime] = useState(true)
+  const [scheduledTime, setScheduledTime] = useState('')
+  useEffect(() => {
+    getScheduledTime()
+      .then(({ data }) => {
+        setScheduledTime(data)
+        setLoadingScheduledTime(false)
+      })
+      .catch((err) => {
+        console.error(err)
+        setLoadingScheduledTime(false)
+        setScheduledTime('Error getting scheduled time from server.')
+      })
+  }, [])
 
   /*
   Everytime input is changed, and the user is either authenticated or has updated their profile, check if the inputs differ from their user data.
@@ -254,11 +273,15 @@ export default function App() {
             inputs={inputs}
             user={user}
             buttonText={buttonText}
+            scheduledTime={scheduledTime}
             constants={{ AUTHENTICATED, CHECK_EMAIL, UPDATED_TEXT, UPDATED }}
           />
 
           <Box mt={5}>
-            <Welcome />
+            <Welcome
+              loadingScheduledTime={loadingScheduledTime}
+              scheduledTime={scheduledTime}
+            />
             <Copyright />
           </Box>
         </div>

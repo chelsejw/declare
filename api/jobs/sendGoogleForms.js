@@ -5,21 +5,34 @@ const CreatePostRequest = require('./modules/createPostRequest')
 const callRequestInBatches = require('./modules/callRequestInBatches')
 const connectToDBAndRun = require('./modules/connectToDBAndRun')
 const UserModel = require('../models/user')
-// const ENVIRONMENT = ENV.NODE_ENV;
 const dayOfWeekAsString = require('./modules/dayOfWeekAsString')
 
 const sendGoogleForms = async () => {
-  const dayOfWeekAsIndex = new Date().getDay().toString()
-  console.log(
-    `The app should run tasks every ${dayOfWeekAsString(SCHEDULED_DAY)}.`,
-  )
-  console.log(`Today is ${dayOfWeekAsString(dayOfWeekAsIndex)}.`)
-  if (dayOfWeekAsIndex !== SCHEDULED_DAY) {
-    console.log(`We are not scheduled to send a form today.`)
-    return
+  const dayOfWeekIndex = new Date().getDay().toString()
+  const currentDay = dayOfWeekAsString(dayOfWeekIndex)
+  const scheduledDay = dayOfWeekAsString(SCHEDULED_DAY)
+  console.log(`Today is ${currentDay}.`)
+
+  let usersToSend
+
+  if (currentDay == scheduledDay) {
+    // If it's the scheduled day, we send it for users who have no configured send_day, or whose send_day is the scheduled day.
+    console.log(
+      `It is the scheduled day. Sending for users whose send_day is ${scheduledDay} or N/A.`,
+    )
+    usersToSend = await UserModel.find({
+      active: true,
+      send_day: { $in: ['', scheduledDay] },
+    })
+  } else {
+    // If it's a non-scheduled day, we send it for users who have customised their send_day to the current day.
+    usersToSend = await UserModel.find({
+      active: true,
+      send_day: currentDay,
+    })
   }
-  const activeUsers = await UserModel.find({ active: true })
-  const allPostRequests = activeUsers.map((user) => {
+
+  const allPostRequests = usersToSend.map((user) => {
     // Create the post request to submit the form for each active user.
     return CreatePostRequest(
       user.user_type, // Should be "team" or "student", determines which form will be sent
