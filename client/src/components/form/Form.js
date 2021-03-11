@@ -27,6 +27,7 @@ export default function Form({
   checkIfUserExists,
   registerUser,
   buttonText,
+  scheduledTime,
 }) {
   const renderErrors = (arrayOfMessages) => {
     return arrayOfMessages.map((msg, index) => {
@@ -76,6 +77,7 @@ export default function Form({
           classes={classes}
           renderErrors={renderErrors}
           handleInputChange={(e) => handleInputChange(e)}
+          scheduledTime={scheduledTime}
         />
       )}
 

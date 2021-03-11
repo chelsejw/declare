@@ -16,6 +16,7 @@ export default function Register({
   errors,
   renderErrors,
   classes,
+  scheduledTime,
 }) {
   const { getCohortList } = requests
   const [cohorts, setCohorts] = useState(['SEIF 3'])
@@ -52,7 +53,6 @@ export default function Register({
     full_name: fullNameErrors,
     cohort: cohortErrors,
     user_type: userTypeErrors,
-    send_day: sendDayErrors,
   } = errors
   return (
     <div>
@@ -177,12 +177,9 @@ export default function Register({
           <FormHelperText>{renderErrors(userTypeErrors)}</FormHelperText>
         )}
       </FormControl>
-      <FormControl
-        className={classes.formControl}
-        error={sendDayErrors.length > 0}
-      >
+      <FormControl className={classes.formControl}>
         <InputLabel shrink id="user_sendDay">
-          Day to Send
+          Day to Send (Optional: If empty, we'll send it every {scheduledTime}.)
         </InputLabel>{' '}
         <Select
           labelId="send_dayLabel"
@@ -197,9 +194,6 @@ export default function Register({
         >
           {dayOptions}
         </Select>
-        {sendDayErrors.length > 0 && (
-          <FormHelperText>{renderErrors(sendDayErrors)}</FormHelperText>
-        )}
       </FormControl>
     </div>
   )

@@ -203,6 +203,22 @@ export default function App() {
       })
   }
 
+  const { getScheduledTime } = requests
+  const [loadingScheduledTime, setLoadingScheduledTime] = useState(true)
+  const [scheduledTime, setScheduledTime] = useState('')
+  useEffect(() => {
+    getScheduledTime()
+      .then(({ data }) => {
+        setScheduledTime(data)
+        setLoadingScheduledTime(false)
+      })
+      .catch((err) => {
+        console.error(err)
+        setLoadingScheduledTime(false)
+        setScheduledTime('Error getting scheduled time from server.')
+      })
+  }, [])
+
   /*
   Everytime input is changed, and the user is either authenticated or has updated their profile, check if the inputs differ from their user data.
   If it differs, we consider the profile to have changed. This will enable the update button.
@@ -257,11 +273,15 @@ export default function App() {
             inputs={inputs}
             user={user}
             buttonText={buttonText}
+            scheduledTime={scheduledTime}
             constants={{ AUTHENTICATED, CHECK_EMAIL, UPDATED_TEXT, UPDATED }}
           />
 
           <Box mt={5}>
-            <Welcome />
+            <Welcome
+              loadingScheduledTime={loadingScheduledTime}
+              scheduledTime={scheduledTime}
+            />
             <Copyright />
           </Box>
         </div>

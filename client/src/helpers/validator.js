@@ -76,14 +76,14 @@ export default function formValidator(inputTypes, inputs) {
       }
     }
 
-    if (type === 'send_day') {
-      const { send_day } = inputs
-      errors.send_day = []
-      if (send_day === '') {
-        errors.send_day.push('Please select a day to send your declaration.')
-        isValid = false
-      }
-    }
+    // if (type === 'send_day') {
+    //   const { send_day } = inputs
+    //   errors.send_day = []
+    //   if (send_day === '') {
+    //     errors.send_day.push('Please select a day to send your declaration.')
+    //     isValid = false
+    //   }
+    // }
   })
 
   return { isValid, errors }
