@@ -43,6 +43,9 @@ const controllers = {
       errorHandler(res, err, 'There was an unexpected system error.')
     }
 
+    // Removes the cohort field if it's a GA Team user.
+    if (req.body.user_type === 'team') req.body.cohort = ''
+
     try {
       const newUser = await User.create({ ...req.body, password: argon2Hash })
 
@@ -138,6 +141,10 @@ const controllers = {
       user_type,
       send_day,
     } = req.body
+
+    // Removes the cohort field if it's a GA Team user.
+    if (user_type === 'team') cohort = ''
+
     User.updateOne(
       { email },
       { ga_email, full_name, active, mobile, cohort, user_type, send_day },

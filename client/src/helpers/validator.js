@@ -1,5 +1,6 @@
 export default function formValidator(inputTypes, inputs) {
   const types = inputTypes.split(', ')
+  console.log(types)
   const errors = {}
   let isValid = true
   types.forEach((type) => {
@@ -60,9 +61,9 @@ export default function formValidator(inputTypes, inputs) {
       }
     }
     if (type === 'cohort') {
-      const { cohort } = inputs
+      const { cohort, user_type } = inputs
       errors.cohort = []
-      if (cohort === '') {
+      if (cohort === '' && user_type === 'student') {
         errors.cohort.push('Please select a cohort.')
         isValid = false
       }

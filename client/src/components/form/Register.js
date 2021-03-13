@@ -128,30 +128,7 @@ export default function Register({
         value={inputs.full_name}
         onChange={(e) => handleInputChange(e)}
       />
-      <FormControl
-        className={classes.formControl}
-        error={cohortErrors.length > 0}
-      >
-        <InputLabel shrink id="cohortLabel">
-          Cohort Name
-        </InputLabel>{' '}
-        <Select
-          labelId="cohortLabel"
-          id="cohort"
-          className={classes.selectEmpty}
-          displayEmpty
-          fullWidth
-          name="cohort"
-          value={inputs.cohort}
-          placeholder="Cohort Name"
-          onChange={(e) => handleInputChange(e)}
-        >
-          {cohortItems}
-        </Select>
-        {cohortErrors.length > 0 && (
-          <FormHelperText>{renderErrors(cohortErrors)}</FormHelperText>
-        )}
-      </FormControl>
+
       <FormControl
         className={classes.formControl}
         error={userTypeErrors.length > 0}
@@ -177,6 +154,34 @@ export default function Register({
           <FormHelperText>{renderErrors(userTypeErrors)}</FormHelperText>
         )}
       </FormControl>
+
+      {inputs.user_type === 'student' && (
+        <FormControl
+          className={classes.formControl}
+          error={cohortErrors.length > 0}
+        >
+          <InputLabel shrink id="cohortLabel">
+            Cohort Name
+          </InputLabel>{' '}
+          <Select
+            labelId="cohortLabel"
+            id="cohort"
+            className={classes.selectEmpty}
+            displayEmpty
+            fullWidth
+            name="cohort"
+            value={inputs.cohort}
+            placeholder="Cohort Name"
+            onChange={(e) => handleInputChange(e)}
+          >
+            {cohortItems}
+          </Select>
+          {cohortErrors.length > 0 && (
+            <FormHelperText>{renderErrors(cohortErrors)}</FormHelperText>
+          )}
+        </FormControl>
+      )}
+
       <FormControl className={classes.formControl}>
         <InputLabel shrink id="user_sendDay">
           Day to Send (Optional: If set to N/A, we'll send it every{' '}
