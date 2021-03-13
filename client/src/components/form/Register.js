@@ -68,7 +68,6 @@ export default function Register({
         label="GA Email Address"
         name="ga_email"
         // autoComplete="email"
-        autoFocus
         value={inputs.ga_email}
         onChange={(e) => handleInputChange(e)}
       />
