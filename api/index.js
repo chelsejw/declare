@@ -13,24 +13,27 @@ const {
   PORT,
   NODE_ENV,
 } = process.env
+const DEVELOPMENT_ENV = 'development'
+const MONGO_ATLAS = 'atlas'
+
 const port = PORT || 4000
-const localMongo = `mongodb://localhost:27017/${DB_NAME}`
-const mongoAtlas = `mongodb+srv://${DB_USER}:${DB_PASS}@${DB_HOST}/${DB_NAME}`
+const LOCAL_MONGO_URI = `mongodb://localhost:27017/${DB_NAME}`
+const MONGO_ATLAS_URI = `mongodb+srv://${DB_USER}:${DB_PASS}@${DB_HOST}/${DB_NAME}`
 const app = express()
 
 /* ===========================
   Express middleware configuration
   ===========================*/
-const whiteList =
-  NODE_ENV === 'development'
+const WHITE_LIST =
+  NODE_ENV === DEVELOPMENT_ENV
     ? ['https://ga-declaration.herokuapp.com', 'http://localhost:3000']
     : 'https://ga-declaration.herokuapp.com'
 
-const corsConfigs = {
-  origin: whiteList,
+const CORS_CONFIG = {
+  origin: WHITE_LIST,
   methods: ['GET', 'POST', 'PATCH'],
 }
-app.use(cors(corsConfigs))
+app.use(cors(CORS_CONFIG))
 app.use(express.json())
 
 /* ===========================
@@ -59,7 +62,7 @@ app.use('/', router)
   ===========================*/
 
 mongoose
-  .connect(DB_TYPE === 'atlas' ? mongoAtlas : localMongo, {
+  .connect(DB_TYPE === MONGO_ATLAS ? MONGO_ATLAS_URI : LOCAL_MONGO_URI, {
     // Will use different connection URI depending on env settings
     useNewUrlParser: true,
     useUnifiedTopology: true,
